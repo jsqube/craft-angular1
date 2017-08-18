@@ -1,0 +1,148 @@
+<div class="clearfix">
+    <div class="pull-right tableTools-container">
+        <div class="dt-buttons btn-overlap btn-group">
+
+            <a class="dt-button buttons-collection buttons-colvis btn btn-white btn-primary btn-bold" tabindex="0"
+               tooltip-placement="top" uib-tooltip="Show/hide columns"
+               aria-controls="dynamic-table" data-original-title="" ng-click="vm.toggleColumnMenu()">
+                <span>
+                    <i class="glyphicon glyphicon-th bigger-110 blue"></i>
+                    <span class="hidden">Show/hide columns</span>
+                </span>
+            </a>
+
+            <a ng-repeat="button in vm.meta.topButtons"
+               ng-click="vm.executeFunctionByName(button.callback,vm.data,button.params)"
+               class="dt-button btn btn-white btn-primary btn-bold" title="{{button.label}}">
+                <span>
+                    <i class="bigger-110 blue" ng-class="button.icon"></i>
+                    <span class="display">{{button.label}}</span>
+                </span>
+            </a>
+
+            <div class="dt-button-collection" style="margin-top: 0px;" ng-show="vm.showColumnMenu">
+                <ul class="dropdown-menu dropdown-light dropdown-caret">
+                    <li ng-repeat="column in vm.meta.columns">
+                        <a class="dt-button buttons-columnVisibility"
+                            ng-class="{active:column.active}" ng-click="vm.toggleColumns(column)"
+                            aria-controls="dynamic-table" href="">
+                            <span>{{column.label}}</span>
+                        </a>
+                    </li>
+
+                    <!--<li><a class="dt-button buttons-columnVisibility" tabindex="0" aria-controls="dynamic-table"-->
+                           <!--href="#"><span>Domain</span></a></li>-->
+                    <!--<li><a class="dt-button buttons-columnVisibility active" tabindex="0" aria-controls="dynamic-table"-->
+                           <!--href="#"><span>Price</span></a></li>-->
+                    <!--<li><a class="dt-button buttons-columnVisibility active" tabindex="0" aria-controls="dynamic-table"-->
+                           <!--href="#"><span>Clicks</span></a></li>-->
+                    <!--<li><a class="dt-button buttons-columnVisibility active" tabindex="0" aria-controls="dynamic-table"-->
+                           <!--href="#"><span>Update</span></a></li>-->
+                    <!--<li><a class="dt-button buttons-columnVisibility active" tabindex="0" aria-controls="dynamic-table"-->
+                           <!--href="#"><span>Status</span></a></li>-->
+                </ul>
+            </div>
+
+            <!--<a class="dt-button buttons-copy buttons-html5 btn btn-white btn-primary btn-bold" title="">-->
+            <!--<span><i class="fa fa-copy bigger-110 pink"></i> <span class="hidden">Copy</span></span></a>-->
+            <!--<a class="dt-button buttons-csv buttons-html5 btn btn-white btn-primary btn-bold" title="">-->
+            <!--<span><i class="fa fa-database bigger-110 orange"></i> <span class="hidden">Export to CSV</span></span></a>-->
+            <!--<a class="dt-button buttons-excel buttons-flash btn btn-white btn-primary btn-bold" >-->
+            <!--<span><i class="fa fa-file-excel-o bigger-110 green"></i> <span class="hidden">Export to Excel</span></span></a>-->
+            <!--<a class="dt-button buttons-pdf buttons-flash btn btn-white btn-primary btn-bold">-->
+            <!--<span><i class="fa fa-file-pdf-o bigger-110 red"></i> <span class="hidden">Export to PDF</span></span>-->
+            <!--</a>-->
+            <!--<a class="dt-button buttons-print btn btn-white btn-primary btn-bold" title="">-->
+            <!--<span><i class="fa fa-print bigger-110 grey"></i> <span class="hidden">Print</span></span>-->
+            <!--</a>-->
+        </div>
+    </div>
+</div>
+
+<div class="table-header">
+    查询结果
+</div>
+
+
+<div>
+    <div class="dataTables_wrapper form-inline no-footer">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="dataTables_length">
+                    <label>每页<select ng-model="vm.pager.pageSize" class="form-control input-sm"
+                                     ng-options="option for option in vm.pager.pageSizeOptions">
+                        <!--<option ng-repeat="option in vm.pager.pageSizeOptions"-->
+                        <!--ng-selected="option==vm.pager.pageSize"-->
+                        <!--value="{{option}}">-->
+                        <!--{{option}}-->
+                        <!--</option>-->
+                    </select>条记录</label>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_filter">
+                    <label>Search:<input type="search" class="form-control input-sm" placeholder=""
+                                         ng-model="vm.searchText"></label>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered table-hover dataTable no-footer">
+            <thead>
+            <tr class="table-header">
+                <th><input type="checkbox" ng-click="vm.selectAllItems()" ng-checked="vm.allSelected" ></th>
+                <th ng-repeat="column in vm.meta.columns|filter:{active: true}" class="center sorting" ng-click="vm.sort(column.sort)"
+                    ng-class="{'sorting_desc':(column.sort===vm.orderColumn) && vm.reverse,'sorting_asc':(column.sort===vm.orderColumn) && (!vm.reverse)}">
+                    {{column.label}}
+                </th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="item in vm.displayData| orderBy :vm.orderColumn:vm.reverse " class="table-detail">
+                <td><input type="checkbox" ng-click="vm.selectOne()" ng-model="item.checked" ></td>
+
+                <td ng-repeat="column in vm.meta.columns|filter:{active: true}" class='hidden-480'>{{item[column.name]}}</td>
+                <td>
+                    <button ng-repeat="button in vm.meta.inlineButtons"
+                            ng-class="button.class"
+                            ng-show="vm.showInLineButton(button.showFunc,item)"
+                            ng-click="vm.executeFunctionByName(button.callback,item)">
+                        <i ng-class="button.icon"></i>{{button.label}}
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="dataTables_info" role="status" aria-live="polite">
+                    显示 ({{vm.pager.from()+1}} - {{vm.pager.to()}})条 / {{vm.pager.filteredItemSize()}} 条
+                    <label ng-if="vm.searchText!==''">(共{{vm.pager.totalItems}}条)</label>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_paginate paging_simple_numbers">
+
+                    <ul uib-pagination total-items="vm.pager.filteredItemSize()"
+                        items-per-page="vm.pager.pageSize"
+                        ng-model="vm.pager.currentPage"
+                        ng-change="vm.pager.pageChanged()"
+                        max-size="5"
+                        class="pagination-sm"
+                        boundary-link-numbers="true"
+                        boundary-links="true"
+                        rotate="false"
+                        first-text="首页"
+                        previous-text="上页"
+                        next-text="下页"
+                        last-text="尾页"
+                    >
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

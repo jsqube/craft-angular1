@@ -1,0 +1,80 @@
+<div>
+
+    <div class="table-header">
+        查询结果
+    </div>
+
+    <div class="dataTables_wrapper form-inline no-footer" style="overflow: auto">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="dataTables_length" id="DataTables_Table_0_length">
+                    <label>Display<select ng-model="vm.pager.pageSize"
+                                          class="form-control input-sm"
+                                          ng-options="option for option in vm.pager.pageSizeOptions">
+                    </select>records</label>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                    <label>Search:<input type="search" class="form-control input-sm" placeholder=""
+                                         ng-model="vm.searchText"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="dataTables_wrapper form-inline no-footer" style="overflow: auto">
+        <table class="table table-striped table-bordered table-hover dataTable no-footer">
+            <thead>
+            <tr class="table-header">
+                <th ng-repeat="column in vm.meta.columns" class="center sorting" ng-click="vm.sort(column.name)"
+                    ng-class="{'sorting_desc':(column.name===vm.orderColumn) && vm.reverse,'sorting_asc':(column.name===vm.orderColumn) && (!vm.reverse)}">
+                    {{column.label}}
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="item in vm.displayData| orderBy :vm.orderColumn:vm.reverse  " class="table-detail">
+                <td ng-repeat="column in vm.meta.columns" class='hidden-480'>{{item[column.name]}}</td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <div class="dataTables_wrapper form-inline no-footer">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">
+                    显示 ({{vm.pager.from()+1}} - {{vm.pager.to()}})条 / {{vm.pager.filteredItemSize()}} 条
+                    <label ng-if="vm.searchText!==''">(共{{vm.pager.totalItems}}条)</label>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+
+                    <ul uib-pagination total-items="vm.pager.filteredItemSize()"
+                        items-per-page="vm.pager.pageSize"
+                        ng-model="vm.pager.currentPage"
+                        ng-change="vm.pager.pageChanged()"
+                        max-size="5"
+                        class="pagination-sm"
+                        boundary-link-numbers="true"
+                        boundary-links="true"
+                        rotate="false"
+                        first-text="首页"
+                        previous-text="上页"
+                        next-text="下页"
+                        last-text="尾页"
+                    >
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
