@@ -1,0 +1,12 @@
+<div class="form-group">
+    <div class="col-xs-12 col-sm-3 control-label">{{field.label}}</div>
+    <div class="col-xs-12 col-sm-9">
+        <input type="email" placeholder="Email" ng-model="currentItem[field.name]"
+               ng-if="field.validator.length!==0"
+               validator="{{field.validator.join()}}"
+                name="{{field.name}}"/>
+        <input type="email" placeholder="Email" ng-model="currentItem[field.name]"
+               ng-if="field.validator.length===0"
+               name="{{field.name}}"/>
+    </div>
+</div>

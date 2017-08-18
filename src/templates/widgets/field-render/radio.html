@@ -1,0 +1,14 @@
+<div class="form-group">
+    <label class="col-xs-12 col-sm-3 control-label">{{field.label}}
+        <i ng-if="field.validator.length!==0" class="glyphicon glyphicon-star"></i>
+    </label>
+
+    <div class="col-xs-12 col-sm-9">
+        <label ng-repeat="option in field.options">
+            <input type="radio" value="{{option.value}}" name="{{field.name}}"
+                   ng-if="field.validator.length!==0"
+                   ng-model="currentItem[field.name]" validator="{{field.validator.join()}}"/>
+            <span ng-bind="option.title"></span>&nbsp;&nbsp;
+        </label>
+    </div>
+</div>

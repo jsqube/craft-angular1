@@ -1,0 +1,17 @@
+<div class="form-group">
+    <label class="col-xs-12 col-sm-3 control-label">{{field.label}}
+        <i ng-if="field.validator.length!==0" class="glyphicon glyphicon-star"></i>
+    </label>
+    <div class="col-xs-12 col-sm-9">
+        <p class="input-group">
+            <uib-rating ng-model="fieldValue" max="{{field.settings.max}}"
+                        readonly="isReadonly" on-hover="hoveringOver(value)"
+                        on-leave="overStar = null" titles="{{field.settings.titles}}"
+                        name="{{field.name}}"
+                        state-on="{{field.settings.stateOn}}" state-off="{{field.settings.stateOff}}">
+            </uib-rating>
+                <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
+                      ng-show="overStar && !isReadonly">{{percent}}%</span>
+        </p>
+    </div>
+</div>

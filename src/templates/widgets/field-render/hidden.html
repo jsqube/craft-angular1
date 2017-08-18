@@ -1,0 +1,15 @@
+<div class="form-group">
+    <label class="col-xs-12 col-sm-3 control-label">{{field.label}}
+        <i ng-if="field.validator.length!==0" class="glyphicon glyphicon-star"></i>
+    </label>
+
+    <div class="col-xs-12 col-sm-9">
+        <input type="hidden" ng-model="currentItem[field.name]"
+               ng-if="field.validator.length!==0"
+               name="{{field.name}}"
+               validator="{{field.validator.join()}}"/>
+        <input type="hidden" ng-model="currentItem[field.name]"
+               ng-if="field.validator.length===0"
+               name="{{field.name}}"/>
+    </div>
+</div>
