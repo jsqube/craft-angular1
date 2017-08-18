@@ -1,15 +1,15 @@
 {
-  "name": "CffexFrame",
+  "name": "wukong-craft",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A json driven web application framework based on angular bootstrap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/uchenm/CffexFrame"
+    "url": "git+https://github.com/uchenm/CffexFrame.git"
   },
   "license": "MIT",
   "devDependencies": {
-    "bower": "^1.4.1",
+    "bower": "^1.8.0",
     "gulp": "^3.9.0",
     "gulp-angular-templatecache": "^1.8.0",
     "gulp-concat": "^2.6.0",
@@ -27,17 +27,19 @@
     "jshint": "^2.8.0",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.3",
-    "karma-coverage": "^1.0.0",
-    "karma-firefox-launcher": "^0.1.6",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.8",
     "karma-junit-reporter": "^0.2.2",
     "karma-ng-html2js-preprocessor": "^0.2.0",
     "karma-requirejs": "^0.2.2",
     "karma-script-launcher": "^1.0.0",
+    "postal.diagnostics": "^0.7.4",
     "protractor": "^2.1.0",
     "requirejs": "^2.1.22",
     "shelljs": "^0.2.6",
-    "postal.diagnostics": "^0.7.4"
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1"
   },
   "scripts": {
     "postinstall": "bower install",

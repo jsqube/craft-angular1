@@ -43,6 +43,7 @@
 
         HttpService.handlePromise = function (promise) {
             var deferred = $q.defer();
+
             promise.success(function (response, status, headers, config) {
                 if (response.errorCode === "0") {
                     console.log("response data===========================");
@@ -71,7 +72,7 @@
     function ConfigServiceFunc($templateCache) {
         var ConfigService=angular.extend({});
         ConfigService.getAppConfig=function () {
-            return $templateCache.get("app-config");
+            return $templateCache.get("meta/config/app-config.json");
         };
 
         return ConfigService;

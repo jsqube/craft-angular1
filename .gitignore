@@ -6,3 +6,5 @@
 .idea/modules.xml
 .idea/workspace.xml
 .idea/wukong-craft.iml
+bower_components/
+node_modules/

@@ -1,0 +1,39 @@
+<div class="row" ng-cloak class="ng-cloak">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <div ng-if="!vm.edit">添加{{vm.meta.title}}</div>
+                    <div ng-if="vm.edit">编辑{{vm.meta.title}}</div>
+                </h3>
+            </div>
+
+            <form class="form-horizontal panel-body" name="thisForm">
+                <div ng-repeat="field in vm.meta.fields">
+                    <field-render field="field" current-item="vm.currentItem"
+                                  ng-if="!vm.hideLogic(field.hideFunc)"></field-render>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-md-10 text-center">
+                        <button ng-repeat="button in vm.meta.formButtons"
+                                ng-class="button.class" validation-submit="thisForm"
+                                ng-click="vm.executeFunctionByName(button.callback,[vm.currentItem])">
+                            <i ng-class="button.icon"></i>{{button.label}}
+                        </button>
+
+                        <button class="btn btn-sm btn-primary" ng-click="vm.handlers.save(vm.currentItem,vm.edit)"
+                                validation-submit="thisForm">
+                            <i class="glyphicon glyphicon-ok">保存</i>
+                        </button>
+                        <button class="btn btn-sm btn-grey" ng-click="vm.handlers.cancel()">
+                            <i class="glyphicon glyphicon-remove">取消</i>
+                        </button>
+                        <!--{{vm.meta.formButtons}}-->
+
+                    </div>
+                </div>
+            </form>
+            <div class="panel-footer">{{vm.currentItem|json}}</div>
+        </div>
+    </div>
+</div>

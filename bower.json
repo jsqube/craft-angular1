@@ -5,10 +5,12 @@
   "homepage": "http://192.168.130.72/cffexitweb/wukong-craft.git",
   "license": "CFFEX",
   "private": true,
-  "dependencies": {
-  },
-  "resolutions": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "angular": "1.5.11",
+    "angular-mocks": "1.5.11",
+    "lodash": "^4.17.4",
+    "bootstrap": "^3.3.7",
+    "angular-ui-router": "^1.0.6"
   }
 }
