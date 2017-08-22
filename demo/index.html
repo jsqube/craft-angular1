@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh_CN">
+<html lang="zh_CN" ng-app="demo">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,9 +7,17 @@
     <meta name="description" content="Craft Demo Project">
     <meta name="author" content="Chen Ming">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/css/craft.css"/>
 </head>
-<body>
+<body ng-controller="SettingsCtrl" ng-class="settings.bodySkin()">
 <ui-view></ui-view>
-<script src="app.js"></script>
+
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../dist/craft/min/craft-core.min.js"></script>
+<script src="../dist/craft/exp/craft-cap-api.js"></script>
+<script src="scripts/metadata.js"></script>
+<script src="scripts/app.js"></script>
+
 </body>
 </html>

@@ -83,7 +83,7 @@
             if (index == -1) return false;
             p += index + 1;
         }
-        return true
+        return true;
     }
 
     /**
@@ -146,10 +146,10 @@
             } else {
                 //create and save the key
                 var key = parent ? parent + '.' + el : el;
-                stack.push(key)
+                stack.push(key);
             }
         });
-        return stack
+        return stack;
     }
 
     /**
@@ -176,32 +176,32 @@
         .filter('isUndefined', function () {
             return function (input) {
                 return angular.isUndefined(input);
-            }
+            };
         })
         .filter('isDefined', function() {
             return function (input) {
                 return angular.isDefined(input);
-            }
+            };
         })
         .filter('isFunction', function() {
             return function (input) {
                 return angular.isFunction(input);
-            }
+            };
         })
         .filter('isString', function() {
             return function (input) {
                 return angular.isString(input)
-            }
+            };
         })
         .filter('isNumber', function() {
             return function (input) {
                 return angular.isNumber(input);
-            }
+            };
         })
         .filter('isArray', function() {
             return function (input) {
                 return angular.isArray(input);
-            }
+            };
         })
         .filter('isObject', function() {
             return function (input) {
@@ -211,7 +211,7 @@
         .filter('isEqual', function() {
             return function (o1, o2) {
                 return angular.equals(o1, o2);
-            }
+            };
         });
 
     /**

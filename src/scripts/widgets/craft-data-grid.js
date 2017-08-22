@@ -39,8 +39,8 @@
                         return (this.currentPage - 1) * this.pageSize;
                     },
                     to: function () {
-                        if (this.currentPage * this.pageSize > this.filteredItemSize()) return this.filteredItemSize()
-                        else return this.currentPage * this.pageSize
+                        if (this.currentPage * this.pageSize > this.filteredItemSize()) return this.filteredItemSize();
+                        else return this.currentPage * this.pageSize;
                     }
                 };
                 vm.searchText = "";
@@ -51,7 +51,7 @@
 
                 CrudService.list(vm.meta.repo).then(function (data) {
                     // console.log(data);
-                    vm.data = data["content"];
+                    vm.data = data.content;
                 }, function (msg) {
                     // console.log(msg);
                     vm.data=[];
@@ -83,7 +83,7 @@
                         vm.pager.totalItems = newValue.length;
                     }
                     vm.filteredData = vm.data;
-                })
+                });
             };
             vm.sort=function (column) {
                 vm.orderColumn=column;
@@ -170,38 +170,38 @@
                     // creates a new object within the scope of the
                     // function which doesn't help in two way binding.
                     scope.$parent.updateSelections = function (selectedItems, item, isMultiple) {
-                        var itemIndex = selectedItems.indexOf(item)
-                        var isPresent = (itemIndex > -1)
+                        var itemIndex = selectedItems.indexOf(item);
+                        var isPresent = (itemIndex > -1);
                         if (isMultiple) {
                             if (isPresent) {
-                                selectedItems.splice(itemIndex, 1)
+                                selectedItems.splice(itemIndex, 1);
                             } else {
-                                selectedItems.push(item)
+                                selectedItems.push(item);
                             }
                         } else {
                             if (isPresent) {
-                                selectedItems.splice(0, 1)
+                                selectedItems.splice(0, 1);
                             } else {
-                                selectedItems.splice(0, 1, item)
+                                selectedItems.splice(0, 1, item);
                             }
                         }
-                    }
+                    };
                 }
 
                 // Adding or removing attributes
-                ele.attr("ng-checked", attrs.checkboxModel + ".indexOf(" + attrs.checkboxValue + ") > -1")
+                ele.attr("ng-checked", attrs.checkboxModel + ".indexOf(" + attrs.checkboxValue + ") > -1");
                 var multiple = attrs.multiple ? "true" : "false";
-                ele.attr("ng-click", "updateSelections(" + [attrs.checkboxModel, attrs.checkboxValue, multiple].join(",") + ")")
-                ele.attr("ng-change", "updateSelections(" + [attrs.checkboxModel, attrs.checkboxValue, multiple].join(",") + ")")
+                ele.attr("ng-click", "updateSelections(" + [attrs.checkboxModel, attrs.checkboxValue, multiple].join(",") + ")");
+                ele.attr("ng-change", "updateSelections(" + [attrs.checkboxModel, attrs.checkboxValue, multiple].join(",") + ")");
                 // Removing the checkbox-model attribute,
                 // it will avoid recompiling the element infinitly
                 ele.removeAttr("checkbox-model");
                 ele.removeAttr("checkbox-value");
                 ele.removeAttr("multiple");
 
-                $compile(ele)(scope)
+                $compile(ele)(scope);
             }
-        }
+        };
     }]);
 
 

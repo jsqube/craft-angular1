@@ -13,7 +13,7 @@
                 $http.get(vm.data)
                     .then(function (response) {
                         vm.treeMenuItems = response.data;
-                        console.log(vm.treeMenuItems)
+                        console.log(vm.treeMenuItems);
                     });
             };
             vm.active = function (item) {
@@ -26,14 +26,14 @@
                 } else {
                     vm.opened = item;
                 }
-            }
+            };
             vm.isSubOpen = function(item) {
                 if (vm.opened == item) return true;
                 else return false;
-            }
+            };
             vm.isActiveItem = function(item) {
                 return vm.selected ===item;
-            }
+            };
         }],
         controllerAs:'vm'
     });

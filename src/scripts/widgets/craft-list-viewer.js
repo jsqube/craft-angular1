@@ -37,8 +37,8 @@
                         return (this.currentPage - 1) * this.pageSize;
                     },
                     to: function () {
-                        if (this.currentPage * this.pageSize > this.filteredItemSize()) return this.filteredItemSize()
-                        else return this.currentPage * this.pageSize
+                        if (this.currentPage * this.pageSize > this.filteredItemSize()) return this.filteredItemSize();
+                        else return this.currentPage * this.pageSize;
                     }
                 };
 
@@ -65,7 +65,7 @@
                         vm.pager.totalItems = newValue.length;
                     }
                     vm.filteredData = vm.data;
-                })
+                });
 
             };
             vm.handleData = function (data) {
@@ -111,7 +111,7 @@
                 // var fn = vm.findFuncByName(funName);
                 //console.log(fn);
                 return vm.executeFunctionByName(funName, item);
-            }
+            };
         }],
         controllerAs: 'vm'
     });

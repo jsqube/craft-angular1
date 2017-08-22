@@ -16,7 +16,7 @@
                         var fn = vm.findFuncByName("itemChanged");
                         fn.call(vm.handlers, newVal);
                     }
-                })
+                });
             };
             vm.$onChanges=function (changesObj) {
                 console.log(changesObj);
@@ -60,5 +60,5 @@
             };
         }],
         controllerAs:'vm'
-    })
+    });
 }).call(this);

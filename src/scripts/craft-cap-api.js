@@ -1,4 +1,4 @@
-((angular, window) => {
+(function(angular, window){
     'use strict';
     angular.module('craft.api', []);
     angular.module('craft.api').factory('HttpService', HttpServiceFunc);
@@ -45,17 +45,21 @@
             var deferred = $q.defer();
 
             promise.success(function (response, status, headers, config) {
-                if (response.errorCode === "0") {
-                    console.log("response data===========================");
-                    console.log(response);
-                    console.log("response data===========================");
-                    deferred.resolve(response.data);
-                } else {
-                    console.log("response data===========================");
-                    console.log(response);
-                    console.log("response data===========================");
-                    deferred.reject(response.errorMsg);
-                }
+                console.log("response data===========================");
+                console.log(response);
+                console.log("response data===========================");
+                deferred.resolve(response);
+                // if (response.errorCode === "0") {
+                //     console.log("response data===========================");
+                //     console.log(response);
+                //     console.log("response data===========================");
+                //     deferred.resolve(response.data);
+                // } else {
+                //     console.log("response data===========================");
+                //     console.log(response);
+                //     console.log("response data===========================");
+                //     deferred.reject(response.errorMsg);
+                // }
             }).error(function (response, status, headers, config) {
                 console.log("response data===========================");
                 console.log(response);
@@ -139,7 +143,7 @@
         };
         CrudService.service = function (serviceName, funcName) {
             var url = ConfigService.getAppConfig().RootPath + '/service/' + serviceName + "/" + funcName;
-            var data = new Array();
+            var data = [];
             var argsCount = arguments.length;
             for (var i = 2; i < argsCount; i++) {
                 data.push(arguments[i]);
