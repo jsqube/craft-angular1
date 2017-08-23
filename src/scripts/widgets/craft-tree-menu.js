@@ -1,6 +1,6 @@
 (function () {
-    angular.module('treeMenu',[]).component('treeMenu', {
-        templateUrl: "templates/widgets/tree-menu.html",
+    angular.module('craft.widgets.treeMenu',[]).component('craftTreeMenu', {
+        templateUrl: "templates/widgets/tree-menu/tree-menu.html",
         bindings: {
             data: '<',
             hover:'<',

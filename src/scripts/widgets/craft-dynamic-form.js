@@ -1,5 +1,5 @@
 (function () {
-    angular.module('craft.widgets.dynamicForm', []).component('dynamicForm', {
+    angular.module('craft.widgets.dynamicForm', []).component('craftDynamicForm', {
         templateUrl: "templates/widgets/dynamic-form.html",
         bindings:{
             meta:'<',

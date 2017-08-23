@@ -1,5 +1,13 @@
 (function () {
-    angular.module('demo', ['craft.core','craft.api','metadata']);
+    angular.module('demo', ['ngSanitize','craft.core','oc.lazyLoad','ui.bootstrap','ui.router','craft.api','craft.auth','metadata','craft.widgets']);
+
+    angular.module('demo').config(['$ocLazyLoadProvider',function ($ocLazyLoadProvider) {
+        $ocLazyLoadProvider.config({
+            debug: true,
+            events: true
+        });
+    }]);
+
     angular.module('demo').config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state("home", {
@@ -11,6 +19,114 @@
                 url: "/default",
                 templateUrl: "views/default.html"
             })
+
+            .state("home.list", {
+                url: "/{docName}/{action}",
+                templateProvider: ['$stateParams','$templateCache','$http',function ($stateParams,$templateCache,$http) {
+                    var appConfig= $templateCache.get('meta/app-module-config.json');
+                    console.log(appConfig);
+                    var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                    console.log("template file=",config.tpl);
+                    return $http.get(config.tpl).then(function (tpl) {
+                        return tpl.data;
+                    })
+                }],
+
+                controllerProvider: ['$stateParams','$templateCache', function ($stateParams, $templateCache) {
+                    var appConfig= $templateCache.get('meta/app-module-config.json');
+                    var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                    console.log("route is: /form/{}/{}", $stateParams.docName,$stateParams.action);
+                    console.log("route config controller: {1}", config);
+                    return config.ctrl;
+                }],
+                resolve: {
+                    listComponents: ['$ocLazyLoad','$templateCache', '$stateParams',function ($ocLazyLoad,$templateCache, $stateParams) {
+                        var appConfig= $templateCache.get('meta/app-module-config.json');
+                        console.log(appConfig);
+                        var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                        console.log("template modules=",config.modules);
+                        return $ocLazyLoad.load(config.modules);
+                    }],
+                    data: ['CrudService', '$stateParams', '$q','$templateCache','listComponents',function (CrudService, $stateParams, $q,$templateCache,listComponents) {
+                        console.log($stateParams.docName);
+                        var appConfig= $templateCache.get('meta/app-module-config.json');
+                        console.log(appConfig);
+                        var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                        console.log(config.repo);
+                        var deferred = $q.defer();
+                        CrudService.list(config.repo).then(function (data) {
+                            console.log(data);
+                            var result = data["content"];
+                            console.log(result);
+                            deferred.resolve(result);
+                        }, function (msg) {
+                            console.log(msg);
+                            deferred.resolve([]);
+                        });
+                        return deferred.promise;
+                    }],
+                    meta: ['$templateCache', '$stateParams','listComponents',function ($templateCache, $stateParams,listComponents) {
+                        console.log($stateParams.docName);
+                        var metadata = $templateCache.get("meta/" + $stateParams.docName + '-' + $stateParams.action+".json");
+                        console.log(metadata);
+                        return metadata;
+                    }]
+
+                }
+            })
+
+            .state('home.edit', {
+                url: "/form/{docName}/{action}/{id}",
+                templateProvider: ['$stateParams','$templateCache','$http',function ($stateParams,$templateCache,$http) {
+                    var appConfig= $templateCache.get('meta/app-config.json');
+                    console.log(appConfig);
+                    var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                    console.log("template file=",config.tpl);
+                    return $http.get(config.tpl).then(function (tpl) {
+                        return tpl.data;
+                    })
+                }],
+                controllerProvider: ['$stateParams', '$templateCache', function ($stateParams, $templateCache) {
+                    var appConfig= $templateCache.get('meta/app-module-config.json');
+                    console.log(appConfig);
+                    var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                    console.log("controller=",config.ctrl);
+                    return config.ctrl;
+                }],
+                resolve: {
+                    formComponents: function ($ocLazyLoad, $stateParams,$templateCache) {
+                        var appConfig= $templateCache.get('meta/app-module-config.json');
+                        var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                        return $ocLazyLoad.load(config.modules);
+                    },
+                    data: function (CrudService, $stateParams, formComponents,$templateCache) {
+                        // console.log($stateParams.docName);
+                        var appConfig= $templateCache.get('meta/app-module-config.json');
+                        var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
+                        if ($stateParams.id) {
+                            var data = CrudService.find(config.repo, $stateParams.id);
+                            console.log(data);
+                            return data;
+                        } else {
+                            return new Object();
+                        }
+                    },
+                    meta: function ($templateCache, $stateParams, formComponents) {
+                        console.log($stateParams.docName);
+                        var metadata = $templateCache.get("meta/" + $stateParams.docName + '-' + $stateParams.action+".json");
+                        console.log(metadata);
+                        return metadata;
+                    },
+                    editFlag: function ($stateParams) {
+                        console.log($stateParams.id);
+                        if ($stateParams.id)
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+            })
+
             .state("auth", {
                 url: "/auth",
                 templateUrl: "views/auth/auth.html",
@@ -23,8 +139,8 @@
                     return "AuthCtrl as vm"
                 }],
                 resolve: {
-                    store: function ($craftLazyLoad) {
-                        return $craftLazyLoad.load(
+                    store: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(
                             {
                                 name: "AuthCtrl",
                                 files: ["scripts/controllers/auth-controller.js"]
@@ -113,7 +229,7 @@
     }]);
 
 
-    angular.module('demo').controller('SettingsCtrl', function ($state,$scope, $rootScope, SettingService, $http, $location, JwtAuthService) {
+    angular.module('demo').controller('SettingsCtrl', function ($state,$scope, $rootScope, SettingService, $http, $location) {
         $scope.settings = SettingService;
 
         $scope.$watch('settings.ace.settings.compact', function (newValue) {
@@ -123,31 +239,7 @@
             }
         });
 
-        //viewContentLoading is used in angular/views/index.html to show/hide content and progress bar (spinner icon) when loading new pages
-        $rootScope.viewContentLoading = false;
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
-            //cfpLoadingBar.start();
-            $rootScope.viewContentLoading = true;
-            //also hide sidebar in mobile view when navigating to a new state
-            $scope.settings.ace.sidebar.toggle = false;
 
-            if (toState.name.indexOf('login') > -1 || JwtAuthService.isLoggedIn()) {
-                return
-            }
-
-            if (!JwtAuthService.isLoggedIn()) {
-                event.preventDefault();
-                $state.go('auth.login', {location: true, reload: true});
-            }
-        });
-        $rootScope.$on('$stateChangeSuccess', function (event) {
-            //cfpLoadingBar.complete();
-            $rootScope.viewContentLoading = false;
-        });
-        $rootScope.$on('$stateChangeError', function (event, p1, p2, p3) {
-            //cfpLoadingBar.complete();
-            $rootScope.viewContentLoading = false;
-        });
 
         $rootScope.appData = $rootScope.appData || {};
         $rootScope.appDataRequest = {};
@@ -185,242 +277,7 @@
         }
     });
 
-    angular.module('demo').controller('UserProfileCtrl',function ($scope,HttpService,ConfigService, TokenService,$state) {
-        $scope.login=function () {
-            console.log("login",$scope.user);
-            HttpService.post(ConfigService.getAppConfig().RootPath+'/auth',$scope.user).then(function (data) {
-                console.log(data);
-                TokenService.saveToken(Constants.authTokenName,data.token);
-                $state.go('home.default');
-            },function (error) {
-                console.log(error)
-            });
 
-        };
-
-        $scope.isLoggedIn = function () {
-            var token = TokenService.getToken(ConfigService.getAppConfig().authTokenName);
-            if (token) {
-                var payload = JSON.parse(atob(token.split('.')[1]));
-
-                return payload.exp > Date.now() / 1000;
-            } else {
-                return false;
-            }
-        };
-
-        $scope.currentUser = function () {
-            if (this.isLoggedIn()) {
-                var token = TokenService.getToken(ConfigService.getAppConfig().authTokenName);
-                var payload = JSON.parse(atob(token.split('.')[1]));
-                // console.log(payload);
-                // console.log( JSON.parse(atob(token.split('.')[0])));
-                // console.log( token.split('.')[2]);
-                return {
-                    email: payload.email,
-                    name: payload.sub
-                };
-            }
-        };
-        $scope.logout = function () {
-            console.log("logout");
-            TokenService.removeToken(ConfigService.getAppConfig().authTokenName);
-            $state.go('auth.login', {location: true, reload: true});
-        };
-    });
-
-    /**
-     * ========================================================================
-     * TokenService
-     * ========================================================================
-     */
-    angular.module('demo').factory('TokenService', ['CraftStorageService', function (CraftStorageService) {
-        return {
-            saveToken: function (name, token) {
-                CraftStorageService.set(name, token);
-            },
-            getToken: function (name) {
-                return CraftStorageService.get(name);
-            },
-            removeToken: function (name) {
-                CraftStorageService.remove(name);
-            }
-        };
-    }]);
-
-
-
-    /**
-     * ========================================================================
-     * FileDownloadService
-     * ========================================================================
-     */
-    angular.module('demo').factory('DownloadService', DownloadServiceFun);
-
-    DownloadServiceFun.$inject=[];
-    function DownloadServiceFun(){
-        var downloadService = angular.extend({});
-        downloadService.strMimeType = 'application/octet-stream;charset=utf-8';
-        downloadService.setMimeType = function (mimeType) {
-            this.strMimeType = mimeType;
-        };
-
-        downloadService.isIE = function () {
-            var match = navigator.userAgent.match(/(?:MSIE |Trident\/.*; rv:)(\d+)/);
-            return match ? parseInt(match[1]) : false;
-        };
-        downloadService.isSafari = function () {
-            var match = navigator.userAgent.match('(Version)/(\\d+)\\.(\\d+)(?:\\.(\\d+))?.*Safari/');
-            return match ? parseInt(match[2]) : false;
-        };
-        downloadService.downloadFile = function (fileName, content) {
-            var D = document;
-            var a = D.createElement('a');
-            var rawFile;
-            var ieVersion;
-
-            ieVersion = this.isIE();
-            if (ieVersion && ieVersion < 10) {
-                var frame = D.createElement('iframe');
-                document.body.appendChild(frame);
-
-                frame.contentWindow.document.open("text/html", "replace");
-                frame.contentWindow.document.write('sep=,\r\n' + content);
-                frame.contentWindow.document.close();
-                frame.contentWindow.focus();
-                frame.contentWindow.document.execCommand('SaveAs', true, fileName);
-
-                document.body.removeChild(frame);
-                return true;
-            }
-
-            // IE10+
-            if (navigator.msSaveBlob) {
-                return navigator.msSaveBlob(
-                    new Blob([content], {
-                        type: this.strMimeType
-                    }),
-                    fileName
-                );
-            }
-
-            //html5 A[download]
-            if ('download' in a) {
-                var blob = new Blob(
-                    [content], {
-                        type: this.strMimeType
-                    }
-                );
-                rawFile = URL.createObjectURL(blob);
-                a.setAttribute('download', fileName);
-            } else {
-                rawFile = 'data:' + this.strMimeType + ',' + encodeURIComponent(content);
-                a.setAttribute('target', '_blank');
-            }
-
-            a.href = rawFile;
-            a.setAttribute('style', 'display:none;');
-            D.body.appendChild(a);
-            setTimeout(function () {
-                if (a.click) {
-                    a.click();
-                    // Workaround for Safari 5
-                } else if (document.createEvent) {
-                    var eventObj = document.createEvent('MouseEvents');
-                    eventObj.initEvent('click', true, true);
-                    a.dispatchEvent(eventObj);
-                }
-                D.body.removeChild(a);
-            }, this.delay);
-        };
-
-        return downloadService;
-    }
-
-    /**
-     * ========================================================================
-     * JwtAuthService
-     * ========================================================================
-     */
-    angular.module('demo').factory('JwtAuthService', JwtAuthServiceFun);
-    JwtAuthServiceFun.$inject=['TokenService', 'ConfigService', '$q', '$http'];
-    function JwtAuthServiceFun(TokenService, ConfigService, $q, $http) {
-        var authService = angular.extend({});
-        authService.isLoggedIn = function () {
-            var token = TokenService.getToken(ConfigService.getAppConfig().authTokenName);
-            if (token) {
-                var payload = JSON.parse(atob(token.split('.')[1]));
-
-                return payload.exp > Date.now() / 1000;
-            } else {
-                return false;
-            }
-        };
-        authService.currentUser = function () {
-            if (this.isLoggedIn()) {
-                var token = TokenService.getToken(ConfigService.getAppConfig().authTokenName);
-                var payload = JSON.parse(atob(token.split('.')[1]));
-                //console.log(payload);
-                //console.log( JSON.parse(atob(token.split('.')[0])));
-                //console.log( token.split('.')[2]);
-                return {
-                    email: payload.email,
-                    name: payload.name
-                };
-            }
-        };
-        authService.logout = function () {
-            TokenService.removeToken(ConfigService.getAppConfig().authTokenName);
-        };
-        authService.logon = function (username, password, verifyCode) {
-            var deferred = $q.defer();
-
-            var user = {"username": username, "password": password, "verifyCode": verifyCode};
-            $http.post(ConfigService.getAppConfig().RootPath + '/logon', JSON.stringify(user))
-                .then(function (data) {
-                    console.log(data);
-                    TokenService.saveToken(ConfigService.getAppConfig().authTokenName, data);
-                    //TokenService.removeToken(ConfigService.getAppConfig().loginTokenName);
-                    //$state.go('home');
-                    deferred.resolve("logon success");
-                }, function (data) {
-                    console.log(data);
-                    // authService.getVerifyImgUrl();
-                    //$scope.imgClicked();
-                    deferred.reject("logon failed");
-                });
-            return deferred.promise;
-        };
-        // authService.getVerifyImgUrl = function () {
-        //     return ConfigService.getRootPath() + "/kaptcha.jpg?" + Math.floor(Math.random() * 100);
-        // };
-        return authService;
-    }
-
-    /**
-     * ========================================================================
-     * JwtTokenInterceptor
-     * ========================================================================
-     */
-
-    angular.module('demo').factory('JwtTokenInterceptor', JwtTokenInterceptor);
-    JwtTokenInterceptor.$inject = [ 'TokenService', 'ConfigService'];
-    function JwtTokenInterceptor(TokenService, ConfigService) {
-        return {
-            request: function (config) {
-                var tokenValue = TokenService.getToken(ConfigService.getAppConfig().authTokenName);
-                if (tokenValue) {
-                    config.headers=config.headers||{};
-                    config.headers['Authorization'] = tokenValue;
-                }
-                return config;
-            }
-        };
-    }
-
-    angular.module('demo').config(['$httpProvider', function ($httpProvider) {
-        $httpProvider.interceptors.push('JwtTokenInterceptor');
-    }]);
 
     /**
      * ========================================================================
@@ -502,5 +359,112 @@
 
         return BaseHandler;
     }
+
+
+    angular.module('demo').directive('aceColorpicker', function () {
+        return {
+            restrict: 'EA',
+            replace: true,
+            scope: {
+                ngModel: '=?',
+                ngValue: '=?',
+                options: '=?',
+                colors: '=?',
+                addNew: '=?'
+            },
+
+            template: '<div uib-dropdown class="dropdown-colorpicker">' +
+            '<a href="" uib-dropdown-toggle><span class="btn-colorpicker" ng-style="{\'background-color\': selectedColor}"></span></a>' +
+            '<ul uib-dropdown-menu aria-labelledby="colorpicker-dropdown" ng-class="{\'dropdown-menu-right\': options.pull_right, \'dropdown-caret\': options.caret}">' +
+            '<li ng-repeat="color in sourceColors">' +
+            '<a href="" ng-click="selectColor(color.color)" ng-class="{\'colorpick-btn\': true , \'selected\': color.selected}" ng-style="{\'background-color\': color.color}"></a>' +
+            '</li>' +
+            '</ul>' +
+            '</div>',
+            link: function ($scope, element, attributes) {
+
+                $scope.addNew = $scope.addNew || false;//if ngModel is assigned a new value, should we add it to our list or not?
+                $scope.sourceColors = {};
+                $scope.options = angular.extend({'caret': true}, $scope.options);
+
+                var selectedColor = false;
+                $scope.selectedColor = false;
+
+                //list of colors
+                //we convert it to an object like {'#FF0000': {color: '#FFFF00', value: 'redValue', selected: false} , ... }
+                $scope.$watch('colors', function (newValue) {
+                    var isObj = false;
+                    var sourceColors = $scope.colors || [];
+
+                    if (angular.isArray(sourceColors)) isObj = false;
+                    else if (angular.isObject(sourceColors)) isObj = true;
+                    else return;
+
+                    $scope.sourceColors = {};
+                    angular.forEach(sourceColors, function (value, index) {
+                        if (isObj) {
+                            //index is color name, value is some value
+                            $scope.sourceColors[index] = {'color': index, 'value': value, 'selected': false};
+                        }
+                        else {
+                            if (angular.isObject(value)) {
+                                //value is an object {color: red, value: something}
+                                $scope.sourceColors[value.color] = {
+                                    'color': value.color,
+                                    'value': value.value,
+                                    'selected': false
+                                };
+                            }
+                            else {
+                                //value is a string (color)
+                                $scope.sourceColors[value] = {'color': value, 'value': value, 'selected': false};
+                            }
+                        }
+                    });
+                });
+
+                //gets called when a color is selected
+                $scope.selectColor = function (color) {
+                    $scope.ngModel = color;
+                }
+                return $scope.$watch('ngModel', function (newValue) {
+                    if (!newValue) return;
+
+                    var newColor;
+                    if (angular.isObject(newValue) && ('color' in newValue)) newColor = newValue.color;
+                    else if (angular.isString(newValue)) newColor = newValue;
+                    else return;
+
+                    //if we already have the color
+                    if ($scope.sourceColors.hasOwnProperty(newColor)) {
+                        if (selectedColor) $scope.sourceColors[selectedColor].selected = false;
+                        $scope.sourceColors[newColor].selected = true;
+                        selectedColor = newColor;
+                    }
+                    //if we don't have the new color let's add it
+                    else if ($scope.addNew) {
+                        if (selectedColor) $scope.sourceColors[selectedColor].selected = false;
+
+                        if (angular.isObject(newValue) && ('color' in newValue)) {
+                            $scope.sourceColors[newColor] =
+                                {
+                                    'color': newColor,
+                                    'value': ('value' in newValue) ? newValue.value : newColor,
+                                    'selected': true
+                                };
+                            $scope.ngModel = selectedColor = newColor;//ngModel shouldn't be an object
+                        }
+                        else if (angular.isString(newValue)) {
+                            $scope.sourceColors[newColor] = {'color': newColor, 'value': newColor, 'selected': true};
+                            selectedColor = newColor;
+                        }
+                    }
+
+                    $scope.selectedColor = selectedColor;
+                    $scope.ngValue = newValue in $scope.sourceColors ? $scope.sourceColors[newColor].value : '';
+                });
+            }
+        };
+    });
 
 }).call(this);

@@ -2,7 +2,7 @@
  * Created by Ming on 2017/4/6.
  */
 (function () {
-    angular.module("listViewer", ["ui.bootstrap"]).component("listViewer", {
+    angular.module("craft.widgets.listViewer", []).component("craftListViewer", {
         templateUrl: "templates/widgets/list-viewer.html",
         bindings: {
             data: '=',

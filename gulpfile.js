@@ -12,10 +12,10 @@ var rename = require('gulp-rename');
 var htmlmin = require('gulp-htmlmin');
 var templateResource = require('gulp-template-resource');
 var copy2 = require('gulp-copy2');
-var clean= require('gulp-clean');
+var clean = require('gulp-clean');
 
 gulp.task('clean', function () {
-    return gulp.src('dist',{read:false}).pipe(clean({false:true}));
+    return gulp.src('dist', {read: false}).pipe(clean({false: true}));
 });
 
 // 语法检查
@@ -23,13 +23,13 @@ gulp.task('jshint', function () {
     return gulp.src('src/scripts/**/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
-        //.pipe(jshint.reporter(stylish));
+    //.pipe(jshint.reporter(stylish));
 });
 
 //combine html template files
 gulp.task('templates', function () {
     //generate dist/craft/craft-templates.html file
-    gulp.src('craftSrc/templates/**/*.html')
+    gulp.src('src/templates/**/*.html')
         .pipe(templateResource('craft-templates.html', {
             standalone: true,
             root: "templates",
@@ -42,21 +42,21 @@ gulp.task('templates', function () {
     gulp.src('src/templates/**/*.html')
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(templateResource('craft-templates.js', {
-            module: 'craft.templates',
+            module: 'craft.widgets.templates',
             stringify: true,
             standalone: true,
-            root: 'craft',
+            root: 'templates',
             templateBody: "$templateCache.put(\"<%= url %>\",'<%= contents %>');",
             //templateHeader:'define(function (require, exports, module) {\nvar angular = require("angular");\nangular.module("<%= module %>"<%= standalone %>).run(["$templateCache", function($templateCache) {\n\n',
             //templateFooter:' \n }]);\n});'
-            templateHeader:'angular.module("<%= module %>"<%= standalone %>).run(["$templateCache", function($templateCache) {\n\n',
-            templateFooter:' \n }]);'
+            templateHeader: '(function () {\n angular.module("<%= module %>"<%= standalone %>).run(["$templateCache", function($templateCache) {\n\n',
+            templateFooter: ' \n }]); \n}).call(this);'
         })).pipe(gulp.dest('dist/craft'));
 });
 
 //combine craft javascript files into separate files
-gulp.task('combineJs', function () {
-    gulp.src("src/scripts/widgets/**/*.js")
+gulp.task('combineJs', ['templates'], function () {
+    gulp.src(["src/scripts/widgets/**/*.js"])
         .pipe(concat("craft-widgets.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
@@ -74,7 +74,11 @@ gulp.task('combineJs', function () {
         .pipe(uglify())
         .pipe(rename('craft-filter.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
-    gulp.src("src/scripts/core/**/*.js")
+    // gulp.src(["src/scripts/core/**/*.js",
+    //     'bower_components/angular-sanitize/angular-sanitize.js',
+    //     'bower_components/angular-animate/angular-animate.js'
+    // ])
+    gulp.src(["src/scripts/core/**/*.js"])
         .pipe(concat("craft-core.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
@@ -103,7 +107,7 @@ gulp.task('combineJs', function () {
 });
 
 gulp.task('combineCss', function () {
-    gulp.src("src/assets/**/ace*.css")
+    gulp.src(["src/assets/css/ace.css", "src/assets/css/ace-skins.css"])
         .pipe(concat("craft.css"))
         .pipe(gulp.dest("dist/craft/css"))
         .pipe(cssmin())
@@ -131,16 +135,16 @@ gulp.task('fonts', function () {
     return copy2(paths);
 });
 
-gulp.task('craft', ['clean','combineJs','combineCss', 'templates','fonts'], function () {
+gulp.task('craft', ['combineJs', 'combineCss'], function () {
 
 });
-gulp.task('demo', ['pkg-json','pkg-tpls'], function () {
+gulp.task('demo', ['pkg-json', 'pkg-tpls'], function () {
 
 });
 gulp.task('pkg-json', function () {
     gulp.src('demo/meta/**/*.json')
         .pipe(templateResource('demoApp-metadata.js', {
-            standalone: true,root:'meta',module:'demo.metadata',
+            standalone: true, root: 'meta', module: 'demo.metadata',
             templateHeader: 'define(function (require, exports, module) {\nvar angular = require("angular");\nangular.module("<%= module %>"<%= standalone %>).run(["$templateCache", function($templateCache) {\n\n ',
             templateFooter: "\n }]);\n});"
         }))
@@ -165,14 +169,14 @@ gulp.task('pkg-tpls', function () {
             stringify: true,
             root: 'tpls',
             templateBody: "$templateCache.put(\"<%= url %>\",'<%= contents %>');",
-            templateHeader:'define(function (require, exports, module) {\nvar angular = require("angular");\nangular.module("<%= module %>"<%= standalone %>).run(["$templateCache", function($templateCache) {\n\n',
-            templateFooter:' \n }]);\n});'
+            templateHeader: 'define(function (require, exports, module) {\nvar angular = require("angular");\nangular.module("<%= module %>"<%= standalone %>).run(["$templateCache", function($templateCache) {\n\n',
+            templateFooter: ' \n }]);\n});'
         })).pipe(gulp.dest('demo'));
 });
 
 // 监视文件的变化
 gulp.task('watch', function () {
-    gulp.watch('src/scripts/**/*.js', [ 'craft']);
+    gulp.watch('src/scripts/**/*.js', ['craft']);
 });
 
 gulp.task('default', ['craft'], function () {

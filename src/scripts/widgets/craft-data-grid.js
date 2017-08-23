@@ -2,9 +2,10 @@
  * Created by Ming on 2017/4/6.
  */
 (function () {
-    angular.module("dataGrid", []).component("craftDataGrid", {
+    angular.module("craft.widgets.dataGrid", []).component("craftDataGrid", {
         templateUrl: "templates/widgets/data-grid.html",
         bindings: {
+            data: '<',
             meta: '<',
             handlers: '<'
         },
@@ -46,17 +47,6 @@
                 vm.searchText = "";
                 vm.orderColumn = null;
                 vm.reverse=false;
-
-                vm.data=[];
-
-                CrudService.list(vm.meta.repo).then(function (data) {
-                    // console.log(data);
-                    vm.data = data.content;
-                }, function (msg) {
-                    // console.log(msg);
-                    vm.data=[];
-                });
-
 
                 vm.meta.columns=vm.meta.columns.map(function (column) {
                     column.active=true;
@@ -158,7 +148,7 @@
     });
 
 
-    angular.module("dataGrid").directive("checkboxModel", ["$compile", function ($compile) {
+    angular.module("craft.widgets.dataGrid").directive("checkboxModel", ["$compile", function ($compile) {
         return {
             restrict: "A",
             link: function (scope, ele, attrs) {

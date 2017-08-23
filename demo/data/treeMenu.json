@@ -1,0 +1,185 @@
+[
+  {
+    "title": "首页",
+    "state": "home.default",
+    "icon": "fa fa-tachometer",
+    "tooltip":"home",
+    "tooltip-class": "tooltip-error"
+  },{
+    "title": "报表管理",
+    "icon": "fa fa-desktop",
+    "badge": "<i class=\"ace-icon fa fa-exclamation-triangle red bigger-130\"></i>",
+    "badge-class": "badge-transparent",
+    "tooltip": "2&nbsp;Important&nbsp;Events",
+    "tooltip-class": "tooltip-error",
+    "submenu":[
+
+      {
+        "title": "表单管理",
+        "state": "home.list",
+        "params":{"docName":"form-designer","action":"list"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "报表管理",
+        "state": "home.list",
+        "params":{"docName":"report","action":"list"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "字典管理",
+        "state": "home.list",
+        "params":{"docName":"dict","action":"list"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "数据源管理",
+        "state": "home.list",
+        "params":{"docName":"data-source","action":"list"},
+        "icon": "icon-double-angle-right"
+      }
+    ]
+  },
+  {
+    "title": "用户权限",
+    "icon": "fa fa-user",
+    "submenu":[
+      {
+        "title": "用户管理",
+        "state": "home.list",
+        "params":{"docName":"user","action":"list"},
+        "icon": "icon-double-angle-right"
+      }
+    ]
+  },
+  {
+    "title": "开发工具",
+    "icon": "fa fa-list-alt",
+    "submenu":[
+      {
+        "title": "wizard",
+        "state": "home.uib",
+        "params":{"docName":"wizard"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "tables",
+        "state": "home.uib",
+        "params":{"docName":"tables"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "Accordion",
+        "state": "home.uib",
+        "params":{"docName":"accordion"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "alert",
+        "state": "home.uib",
+        "params":{"docName":"alert"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "buttons",
+        "state": "home.uib",
+        "params":{"docName":"buttons"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "carousel",
+        "state": "home.uib",
+        "params":{"docName":"carousel"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "collapse",
+        "state": "home.uib",
+        "params":{"docName":"collapse"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "DateParser",
+        "state": "home.uib",
+        "params":{"docName":"DateParser"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "Datepicker",
+        "state": "home.uib",
+        "params":{"docName":"Datepicker"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "DatepickerPopup",
+        "state": "home.uib",
+        "params":{"docName":"DatepickerPopup"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "Dropdown",
+        "state": "home.uib",
+        "params":{"docName":"Dropdown"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "modal",
+        "state": "home.uib",
+        "params":{"docName":"modal"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "pager",
+        "state": "home.uib",
+        "params":{"docName":"pager"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "Pagination",
+        "state": "home.uib",
+        "params":{"docName":"pagination"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "popover",
+        "state": "home.uib",
+        "params":{"docName":"popover"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "position",
+        "state": "home.uib",
+        "params":{"docName":"position"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "Progress",
+        "state": "home.uib",
+        "params":{"docName":"Progress"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "rating",
+        "state": "home.uib",
+        "params":{"docName":"rating"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "tabs",
+        "state": "home.uib",
+        "params":{"docName":"tabs"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "timepicker",
+        "state": "home.uib",
+        "params":{"docName":"timepicker"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "tooltip",
+        "state": "home.uib",
+        "params":{"docName":"tooltip"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "typeahead",
+        "state": "home.uib",
+        "params":{"docName":"typeahead"},
+        "icon": "icon-double-angle-right"
+      }
+    ]
+  }
+
+]

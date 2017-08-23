@@ -1,6 +1,12 @@
 (function(angular, window){
     'use strict';
     angular.module('craft.api', []);
+
+    /**
+     * ========================================================================
+     * HttpService
+     * ========================================================================
+     */
     angular.module('craft.api').factory('HttpService', HttpServiceFunc);
     HttpServiceFunc.$inject = ['$q', '$http' ];
     function HttpServiceFunc($q, $http) {
@@ -70,32 +76,43 @@
         };
         return HttpService;
     }
-
+    /**
+     * ========================================================================
+     * ConfigService
+     * ========================================================================
+     */
     angular.module('craft.api').factory('ConfigService', ConfigServiceFunc);
     ConfigServiceFunc.$inject = ['$templateCache'];
     function ConfigServiceFunc($templateCache) {
         var ConfigService=angular.extend({});
         ConfigService.getAppConfig=function () {
-            return $templateCache.get("meta/config/app-config.json");
+            return $templateCache.get("meta/app-config.json");
         };
 
         return ConfigService;
     }
-
+    /**
+     * ========================================================================
+     * CrudService
+     * ========================================================================
+     */
     angular.module('craft.api').factory('CrudService', CrudServiceFun);
-    CrudServiceFun.$inject = [ 'HttpService', 'ConfigService' ];
-    function CrudServiceFun(HttpService, ConfigService) {
+    CrudServiceFun.$inject = ['HttpService', 'Constants', '$q'];
+    function CrudServiceFun(HttpService, Constants, $q) {
         var CrudService = angular.extend({});
         CrudService.list = function (repoName) {
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName + "/findAll";
+            var url = Constants.RootPath + '/api/' + repoName + "";
             return HttpService.get(url);
         };
+
         CrudService.find = function (repoName, id) {
             //var formData = new Array(id);
             var params = 'params=[' + JSON.stringify(id) + ']';
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName + "/findById?" + params;
+            // var url = RestApiConfig.RootPath + '/' + repoName + "/findById?" + params;
+            var url = Constants.RootPath + '/api/' + repoName + "/" + id;
             return HttpService.get(url);
         };
+
         /**
          * findByCriteria
          * @param repoName
@@ -104,11 +121,12 @@
          * @returns {*}
          */
         CrudService.findByCriteria = function (repoName, method, params) {
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName
-                + "/" + (method ? method : 'findAll')
-                + (params ? '?params=' + params  : '');
+            var url = Constants.RootPath + '/api/' + repoName
+                // + "/" + (method ? method : 'findAll')
+                + (params ? '?params=' + params : '');
             return HttpService.get(url, false);
         };
+
         /**
          * findByCriteriaPageable
          * @param repoName : newsRepository
@@ -120,38 +138,154 @@
          * @returns {*}
          */
         CrudService.findByCriteriaPageable = function (repoName, method, pageSize, pageIndex, params, sortFields) {
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName
-                + "/" + (method ? method : 'findAll')
+            var url = Constants.RootPath + '/api/' + repoName
+                // + "/" + (method ? method : 'findAll')
                 + "/" + pageSize + "/" + pageIndex
                 + (params ? '?params=' + params : '')
                 + (sortFields ? '&sort=' + sortFields : '');
             return HttpService.get(url, false);
         };
+
         CrudService.update = function (repoName, id, formData) {
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName + '/' + id;
+            var url = Constants.RootPath + '/api/' + repoName + '/' + id;
             var params = 'params=' + JSON.stringify(formData);
-            return HttpService.post(url, formData);
-        };
-        CrudService.create = function (repoName, formData) {
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName;
             return HttpService.put(url, formData);
         };
+
+        CrudService.create = function (repoName, formData) {
+            var url = Constants.RootPath + '/api/' + repoName;
+            return HttpService.post(url, formData);
+        };
+
         CrudService.delete = function (repoName, id) {
             // var params = 'params=[' + JSON.stringify(id)+']';
-            var url = ConfigService.getAppConfig().RootPath + '/repository/' + repoName + "/" + id;
+            var url = Constants.RootPath + '/api/' + repoName + "/" + id;
             return HttpService.delete(url);
         };
-        CrudService.service = function (serviceName, funcName) {
-            var url = ConfigService.getAppConfig().RootPath + '/service/' + serviceName + "/" + funcName;
-            var data = [];
-            var argsCount = arguments.length;
-            for (var i = 2; i < argsCount; i++) {
-                data.push(arguments[i]);
-            }
-            var params = 'params=' + JSON.stringify(data);
+
+        CrudService.postService = function (serviceName, funcName,params) {
+            var url = Constants.RootPath + '/service/' + serviceName + "/" + funcName;
+            // var funcParams = [];
+            // var argsCount = arguments.length;
+            // for (var i = 2; i < argsCount; i++) {
+            //     funcParams.push(arguments[i]);
+            // }
+            // var params = {};
+            // params.params = JSON.stringify(funcParams);
             return HttpService.post(url, params);
         };
 
+        CrudService.getService = function (serviceName, funcName,params) {
+            var url = Constants.RootPath + '/service/' + serviceName + "/" + funcName;
+            return CrudService.urlService(url, params);
+        };
+
+        CrudService.urlService = function (url,params) {
+            return HttpService.get(url+"?params="+encodeURI(JSON.stringify(params)));
+        };
+
+        CrudService.handlePromise = function (promise, repoName) {
+            var deferred = $q.defer();
+            promise.success(function (response, status, headers, config) {
+                console.log("response data===========================");
+                console.log(response);
+                console.log("response data===========================");
+                deferred.resolve(response);
+            }).error(function (response, status, headers, config) {
+                console.log("response data===========================");
+                console.log(response);
+                console.log("response data===========================");
+                deferred.reject("request error with :" + status);
+            });
+            return deferred.promise;
+        };
         return CrudService;
+    }
+
+
+    /**
+     * ========================================================================
+     * DownloadService
+     * ========================================================================
+     */
+    angular.module('craft.api').factory('DownloadService', DownloadServiceFun);
+    DownloadServiceFun.$inject=[];
+    function DownloadServiceFun(){
+        var downloadService = angular.extend({});
+        downloadService.strMimeType = 'application/octet-stream;charset=utf-8';
+        downloadService.setMimeType = function (mimeType) {
+            this.strMimeType = mimeType;
+        };
+
+        downloadService.isIE = function () {
+            var match = navigator.userAgent.match(/(?:MSIE |Trident\/.*; rv:)(\d+)/);
+            return match ? parseInt(match[1]) : false;
+        };
+        downloadService.isSafari = function () {
+            var match = navigator.userAgent.match('(Version)/(\\d+)\\.(\\d+)(?:\\.(\\d+))?.*Safari/');
+            return match ? parseInt(match[2]) : false;
+        };
+        downloadService.downloadFile = function (fileName, content) {
+            var D = document;
+            var a = D.createElement('a');
+            var rawFile;
+            var ieVersion;
+
+            ieVersion = this.isIE();
+            if (ieVersion && ieVersion < 10) {
+                var frame = D.createElement('iframe');
+                document.body.appendChild(frame);
+
+                frame.contentWindow.document.open("text/html", "replace");
+                frame.contentWindow.document.write('sep=,\r\n' + content);
+                frame.contentWindow.document.close();
+                frame.contentWindow.focus();
+                frame.contentWindow.document.execCommand('SaveAs', true, fileName);
+
+                document.body.removeChild(frame);
+                return true;
+            }
+
+            // IE10+
+            if (navigator.msSaveBlob) {
+                return navigator.msSaveBlob(
+                    new Blob([content], {
+                        type: this.strMimeType
+                    }),
+                    fileName
+                );
+            }
+
+            //html5 A[download]
+            if ('download' in a) {
+                var blob = new Blob(
+                    [content], {
+                        type: this.strMimeType
+                    }
+                );
+                rawFile = URL.createObjectURL(blob);
+                a.setAttribute('download', fileName);
+            } else {
+                rawFile = 'data:' + this.strMimeType + ',' + encodeURIComponent(content);
+                a.setAttribute('target', '_blank');
+            }
+
+            a.href = rawFile;
+            a.setAttribute('style', 'display:none;');
+            D.body.appendChild(a);
+            setTimeout(function () {
+                if (a.click) {
+                    a.click();
+                    // Workaround for Safari 5
+                } else if (document.createEvent) {
+                    var eventObj = document.createEvent('MouseEvents');
+                    eventObj.initEvent('click', true, true);
+                    a.dispatchEvent(eventObj);
+                }
+                D.body.removeChild(a);
+            }, this.delay);
+        };
+
+        return downloadService;
     }
 })(angular, window);

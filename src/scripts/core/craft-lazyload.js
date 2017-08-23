@@ -1,14 +1,14 @@
 /**
- * craftLazyLoad - Load modules on demand (lazy load) with angularJS
+ * oclazyload - Load modules on demand (lazy load) with angularJS
  * @version v1.0.10
- * @link https://github.com/ocombe/craftLazyLoad
+ * @link https://github.com/ocombe/ocLazyLoad
  * @license MIT
  * @author Olivier Combe <olivier.combe@gmail.com>
  */
 (function (angular, window) {
     'use strict';
 
-    var regModules = ['ng', 'craft.lazyLoad'],
+    var regModules = ['ng', 'oc.lazyLoad'],
         regInvokes = {},
         regConfigs = [],
         modulesToLoad = [],
@@ -20,9 +20,9 @@
         runBlocks = {},
         justLoaded = [];
 
-    var craftLazyLoad = angular.module('craft.lazyLoad', ['ng']);
+    var ocLazyLoad = angular.module('oc.lazyLoad', ['ng']);
 
-    craftLazyLoad.provider('$craftLazyLoad', ["$controllerProvider", "$provide", "$compileProvider", "$filterProvider", "$injector", "$animateProvider", function ($controllerProvider, $provide, $compileProvider, $filterProvider, $injector, $animateProvider) {
+    ocLazyLoad.provider('$ocLazyLoad', ["$controllerProvider", "$provide", "$compileProvider", "$filterProvider", "$injector", "$animateProvider", function ($controllerProvider, $provide, $compileProvider, $filterProvider, $injector, $animateProvider) {
         var modules = {},
             providers = {
                 $controllerProvider: $controllerProvider,
@@ -107,7 +107,7 @@
             }
 
             if (modulesToLoad.length === 0 && !((window.jasmine || window.mocha) && angular.isDefined(angular.mock))) {
-                console.error('No module found during bootstrap, unable to init craftLazyLoad. You should always use the ng-app directive or angular.boostrap when you use craftLazyLoad.');
+                console.error('No module found during bootstrap, unable to init ocLazyLoad. You should always use the ng-app directive or angular.boostrap when you use ocLazyLoad.');
             }
 
             var addReg = function addReg(moduleName) {
@@ -204,7 +204,7 @@
                     }
                     _invokeQueue(providers, moduleFn._invokeQueue, moduleName, params.reconfig);
                     _invokeQueue(providers, moduleFn._configBlocks, moduleName, params.reconfig); // angular 1.3+
-                    broadcast(newModule ? 'craftLazyLoad.moduleLoaded' : 'craftLazyLoad.moduleReloaded', moduleName);
+                    broadcast(newModule ? 'ocLazyLoad.moduleLoaded' : 'ocLazyLoad.moduleReloaded', moduleName);
                     registerModules.pop();
                     justLoaded.push(moduleName);
                 }
@@ -233,7 +233,7 @@
                 if (checkHashes(invoke, regInvokes[moduleName][type][invokeName])) {
                     newInvoke = true;
                     regInvokes[moduleName][type][invokeName].push(invoke);
-                    broadcast('craftLazyLoad.componentLoaded', [moduleName, type, invokeName]);
+                    broadcast('ocLazyLoad.componentLoaded', [moduleName, type, invokeName]);
                 }
             };
 
@@ -357,7 +357,7 @@
 
         this.$get = ["$log", "$rootElement", "$rootScope", "$cacheFactory", "$q", function ($log, $rootElement, $rootScope, $cacheFactory, $q) {
             var instanceInjector,
-                filesCache = $cacheFactory('craftLazyLoad');
+                filesCache = $cacheFactory('ocLazyLoad');
 
             if (!debug) {
                 $log = {};
@@ -744,7 +744,7 @@
     var bootstrapFct = angular.bootstrap;
     angular.bootstrap = function (element, modules, config) {
         // Clean state from previous bootstrap
-        regModules = ['ng', 'craft.lazyLoad'];
+        regModules = ['ng', 'oc.lazyLoad'];
         regInvokes = {};
         regConfigs = [];
         modulesToLoad = [];
@@ -777,13 +777,13 @@
 
     // CommonJS package manager support:
     if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports) {
-        module.exports = 'craft.lazyLoad';
+        module.exports = 'oc.lazyLoad';
     }
 })(angular, window);
 (function (angular) {
     'use strict';
 
-    angular.module('craft.lazyLoad').directive('craftLazyLoad', ["$craftLazyLoad", "$compile", "$animate", "$parse", "$timeout", function ($craftLazyLoad, $compile, $animate, $parse, $timeout) {
+    angular.module('oc.lazyLoad').directive('ocLazyLoad', ["$ocLazyLoad", "$compile", "$animate", "$parse", "$timeout", function ($ocLazyLoad, $compile, $animate, $parse, $timeout) {
         return {
             restrict: 'A',
             terminal: true,
@@ -794,12 +794,12 @@
                 element.html('');
 
                 return function ($scope, $element, $attr) {
-                    var model = $parse($attr.craftLazyLoad);
+                    var model = $parse($attr.ocLazyLoad);
                     $scope.$watch(function () {
-                        return model($scope) || $attr.craftLazyLoad; // it can be a module name (string), an object, an array, or a scope reference to any of this
+                        return model($scope) || $attr.ocLazyLoad; // it can be a module name (string), an object, an array, or a scope reference to any of this
                     }, function (moduleName) {
                         if (angular.isDefined(moduleName)) {
-                            $craftLazyLoad.load(moduleName).then(function () {
+                            $ocLazyLoad.load(moduleName).then(function () {
                                 // Attach element contents to DOM and then compile them.
                                 // This prevents an issue where IE invalidates saved element objects (HTMLCollections)
                                 // of the compiled contents when attaching to the parent DOM.
@@ -817,8 +817,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('craft.lazyLoad').config(["$provide", function ($provide) {
-        $provide.decorator('$craftLazyLoad', ["$delegate", "$q", "$window", "$interval", function ($delegate, $q, $window, $interval) {
+    angular.module('oc.lazyLoad').config(["$provide", function ($provide) {
+        $provide.decorator('$ocLazyLoad', ["$delegate", "$q", "$window", "$interval", function ($delegate, $q, $window, $interval) {
             var uaCssChecked = false,
                 useCssLoadPatch = false,
                 anchor = $window.document.getElementsByTagName('head')[0] || $window.document.getElementsByTagName('body')[0];
@@ -875,7 +875,7 @@
                     if (el['readyState'] && !/^c|loade/.test(el['readyState']) || loaded) return;
                     el.onload = el['onreadystatechange'] = null;
                     loaded = 1;
-                    $delegate._broadcast('craftLazyLoad.fileLoaded', path);
+                    $delegate._broadcast('ocLazyLoad.fileLoaded', path);
                     deferred.resolve(el);
                 };
                 el.onerror = function () {
@@ -949,8 +949,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('craft.lazyLoad').config(["$provide", function ($provide) {
-        $provide.decorator('$craftLazyLoad', ["$delegate", "$q", function ($delegate, $q) {
+    angular.module('oc.lazyLoad').config(["$provide", function ($provide) {
+        $provide.decorator('$ocLazyLoad', ["$delegate", "$q", function ($delegate, $q) {
             /**
              * The function that loads new files
              * @param config
@@ -992,7 +992,7 @@
                             if ((m = /[.](css|less|html|htm|js)?((\?|#).*)?$/.exec(path)) !== null) {
                                 // Detect file type via file extension
                                 file_type = m[1];
-                            } else if (!$delegate.jsLoader.hasOwnProperty('craftLazyLoadLoader') && $delegate.jsLoader.hasOwnProperty('requirejs')) {
+                            } else if (!$delegate.jsLoader.hasOwnProperty('ocLazyLoadLoader') && $delegate.jsLoader.hasOwnProperty('requirejs')) {
                                 // requirejs
                                 file_type = 'js';
                             } else {
@@ -1026,7 +1026,7 @@
                 if (cssFiles.length > 0) {
                     var cssDeferred = $q.defer();
                     $delegate.cssLoader(cssFiles, function (err) {
-                        if (angular.isDefined(err) && $delegate.cssLoader.hasOwnProperty('craftLazyLoadLoader')) {
+                        if (angular.isDefined(err) && $delegate.cssLoader.hasOwnProperty('ocLazyLoadLoader')) {
                             $delegate._$log.error(err);
                             cssDeferred.reject(err);
                         } else {
@@ -1039,7 +1039,7 @@
                 if (templatesFiles.length > 0) {
                     var templatesDeferred = $q.defer();
                     $delegate.templatesLoader(templatesFiles, function (err) {
-                        if (angular.isDefined(err) && $delegate.templatesLoader.hasOwnProperty('craftLazyLoadLoader')) {
+                        if (angular.isDefined(err) && $delegate.templatesLoader.hasOwnProperty('ocLazyLoadLoader')) {
                             $delegate._$log.error(err);
                             templatesDeferred.reject(err);
                         } else {
@@ -1052,7 +1052,7 @@
                 if (jsFiles.length > 0) {
                     var jsDeferred = $q.defer();
                     $delegate.jsLoader(jsFiles, function (err) {
-                        if (angular.isDefined(err) && ($delegate.jsLoader.hasOwnProperty("craftLazyLoadLoader") || $delegate.jsLoader.hasOwnProperty("requirejs"))) {
+                        if (angular.isDefined(err) && ($delegate.jsLoader.hasOwnProperty("ocLazyLoadLoader") || $delegate.jsLoader.hasOwnProperty("requirejs"))) {
                             $delegate._$log.error(err);
                             jsDeferred.reject(err);
                         } else {
@@ -1183,8 +1183,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('craft.lazyLoad').config(["$provide", function ($provide) {
-        $provide.decorator('$craftLazyLoad', ["$delegate", "$q", function ($delegate, $q) {
+    angular.module('oc.lazyLoad').config(["$provide", function ($provide) {
+        $provide.decorator('$ocLazyLoad', ["$delegate", "$q", function ($delegate, $q) {
             /**
              * cssLoader function
              * @type Function
@@ -1204,7 +1204,7 @@
                     callback(err);
                 });
             };
-            $delegate.cssLoader.craftLazyLoadLoader = true;
+            $delegate.cssLoader.ocLazyLoadLoader = true;
 
             return $delegate;
         }]);
@@ -1213,8 +1213,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('craft.lazyLoad').config(["$provide", function ($provide) {
-        $provide.decorator('$craftLazyLoad', ["$delegate", "$q", function ($delegate, $q) {
+    angular.module('oc.lazyLoad').config(["$provide", function ($provide) {
+        $provide.decorator('$ocLazyLoad', ["$delegate", "$q", function ($delegate, $q) {
             /**
              * jsLoader function
              * @type Function
@@ -1234,7 +1234,7 @@
                     callback(err);
                 });
             };
-            $delegate.jsLoader.craftLazyLoadLoader = true;
+            $delegate.jsLoader.ocLazyLoadLoader = true;
 
             return $delegate;
         }]);
@@ -1243,8 +1243,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('craft.lazyLoad').config(["$provide", function ($provide) {
-        $provide.decorator('$craftLazyLoad', ["$delegate", "$templateCache", "$q", "$http", function ($delegate, $templateCache, $q, $http) {
+    angular.module('oc.lazyLoad').config(["$provide", function ($provide) {
+        $provide.decorator('$ocLazyLoad', ["$delegate", "$templateCache", "$q", "$http", function ($delegate, $templateCache, $q, $http) {
             /**
              * templatesLoader function
              * @type Function
@@ -1283,7 +1283,7 @@
                     callback(err);
                 });
             };
-            $delegate.templatesLoader.craftLazyLoadLoader = true;
+            $delegate.templatesLoader.ocLazyLoadLoader = true;
 
             return $delegate;
         }]);
