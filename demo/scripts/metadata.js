@@ -10,7 +10,7 @@
                 "repo": "report",
                 "ctrl": "ReportCtrl",
                 "tpl": "views/list.html",
-                "modules": [{
+                "modules": [{name:"ReportCtrl",
                     files: ['scripts/controllers/report-controller.js']
                 }]
             },
@@ -19,7 +19,7 @@
                 "repo": "reportDataSource",
                 "ctrl": "DataSourceCtrl",
                 "tpl": "views/list.html",
-                "modules": [{
+                "modules": [{name:"DataSourceCtrl",
                     files: ['scripts/controllers/data-source-controller.js']
                 }]
             },
@@ -27,7 +27,7 @@
                 "repo": "dictionary",
                 "ctrl": "DictCtrl",
                 "tpl": "views/list.html",
-                "modules": [{
+                "modules": [{name:"DictCtrl",
                     files: ['scripts/controllers/dict-controller.js']
                 }]
             },
@@ -35,12 +35,129 @@
                 "repo": "forms",
                 "ctrl": "FormDesignerCtrl",
                 "tpl": "views/list.html",
+                "modules": [{name:'FormDesignerCtrl',
+                    files: ['scripts/controllers/form-designer-controller.js']
+                }]
+            },
+
+            "dict-detail": {
+                "repo": "dictionary",
+                "findMethod": "findById",
+                "ctrl": "DictCtrl",
+                "tpl": "views/form-view/dynamic-form.html",
+                "modules": [{name:"DictCtrl",
+                    files: ['scripts/controllers/dict-controller.js']
+                }]
+            },
+
+            "report-detail": {
+                "repo": "report",
+                "ctrl": "ReportCtrl",
+                "tpl": "views/form-view/report-designer.html",
+                "modules": [{
+                    files: ['scripts/controllers/report-controller.js']
+                }, 'ReportDesigner'
+                ]
+            },
+
+            "data-source-detail": {
+                "repo": "reportDataSource",
+                "ctrl": "DataSourceCtrl",
+                "tpl": "views/form-view/dynamic-form.html",
+                "modules": [{
+                    files: ['scripts/controllers/data-source-controller.js']
+                }]
+            },
+
+            "form-designer-detail": {
+                "repo": "forms",
+                "ctrl": "FormDesignerCtrl",
+                "tpl": "views/form-view/form-designer.html",
                 "modules": [{
                     files: ['scripts/controllers/form-designer-controller.js']
+                }]
+            },
+            "Line-chart":{
+                "ctrl": "LineChartCtrl",
+                "tpl": "views/charts-template.html",
+                "modules": [{
+                    files: ["../bower_components/chart.js/dist/Chart.js",
+                        'scripts/controllers/line-chart-controller.js']
+                }]
+            },
+            "Bar-chart":{
+                "ctrl": "BarChartCtrl",
+                "tpl": "views/charts-template.html",
+                "modules": [{
+                    files: ["../bower_components/chart.js/dist/Chart.js",'scripts/controllers/bar-chart-controller.js']
+                }]
+            },
+            "Pie-chart":{
+                "ctrl": "PieChartCtrl",
+                "tpl": "views/charts-template.html",
+                "modules": [{
+                    files: ['scripts/controllers/pie-chart-controller.js']
+                }]
+            },
+            "Radar-chart":{
+                "ctrl": "RadarChartCtrl",
+                "tpl": "views/charts-template.html",
+                "modules": [{
+                    files: ['scripts/controllers/radar-chart-controller.js']
+                }]
+            },
+            "Polar-chart":{
+                "ctrl": "PolarChartCtrl",
+                "tpl": "views/charts-template.html",
+                "modules": [{
+                    files: ['scripts/controllers/polar-chart-controller.js']
+                }]
+            },
+            "Doughnut-chart":{
+                "ctrl": "DoughnutChartCtrl",
+                "tpl": "views/charts-template.html",
+                "modules": [{
+                    files: ['scripts/controllers/doughnut-chart-controller.js']
                 }]
             }
         });
 
+        $templateCache.put("meta/form-designer-list.json",{
+            "repo":"forms",
+            "columns": [
+                {"name": "id", "label": "ID", "sort": "id"},
+                {"name": "formName", "label": "表单名称", "sort": "formName"}
+            ],
+            "topButtons": [
+                {
+                    "callback": "new",
+                    "params": {"docName":"form-designer"},
+                    "label": "添加",
+                    "class": "btn btn-sm btn-primary",
+                    "icon": "glyphicon glyphicon-plus-sign"
+                }
+            ],
+            "inlineButtons": [
+                {
+                    "callback": "edit",
+                    "label": "编辑",
+                    "class": "btn btn-xs btn-primary",
+                    "icon": "glyphicon glyphicon-edit"
+                },
+                {
+                    "callback": "preview",
+                    "label": "预览",
+                    "class": "btn btn-xs btn-info",
+                    "icon": "glyphicon glyphicon-signal"
+                },
+                {
+                    "callback": "delete",
+                    "label": "删除",
+                    "class": "btn btn-xs btn-danger",
+                    "icon": "glyphicon glyphicon-trash"
+                }
+            ]
+        });
         $templateCache.put("meta/report-list.json",{
             "repo":"report",
             "columns": [
@@ -92,7 +209,6 @@
                 }
             ]
         });
-
         $templateCache.put("meta/data-source-list.json",{
             "repo":"reportDataSource",
             "columns": [
@@ -135,6 +251,133 @@
                     "class": "btn btn-xs btn-danger",
                     "icon": "glyphicon glyphicon-trash"
                 }
+            ]
+        });
+        $templateCache.put("meta/dict-list.json",{
+            "repo": "dictionary",
+            "columns": [
+                {"name": "id", "label": "ID", "sort": "id"},
+                {"name": "name", "label": "字典名称", "sort": "name"}
+            ],
+            "topButtons": [
+                {
+                    "callback": "export",
+                    "params": {"docName":"dict"},
+                    "label": "导出",
+                    "class": "btn btn-sm btn-primary",
+                    "icon": "glyphicon glyphicon-export"
+                },
+                {
+                    "callback": "import",
+                    "params": {"docName":"dict"},
+                    "label": "导入",
+                    "class": "btn btn-sm btn-primary",
+                    "icon": "glyphicon glyphicon-import"
+                },
+                {
+                    "callback": "new",
+                    "params": {"docName":"dict"},
+                    "label": "添加",
+                    "class": "btn btn-sm btn-primary",
+                    "icon": "glyphicon glyphicon-plus-sign"
+                }
+            ],
+            "inlineButtons": [
+                {
+                    "callback": "edit",
+                    "label": "编辑",
+                    "class": "btn btn-xs btn-primary",
+                    "icon": "glyphicon glyphicon-edit"
+                },
+                {
+                    "callback": "delete",
+                    "label": "删除",
+                    "class": "btn btn-xs btn-danger",
+                    "icon": "glyphicon glyphicon-trash"
+                }
+            ]
+        });
+
+        $templateCache.put("meta/dict-detail.json",{
+            "name": "dictForm",
+            "title": "字典信息",
+            "fields": [
+                {"type": "textfield", "name": "name", "label": "字典名称", "validator": ["required"]},
+                {"type": "dropdown", "name": "type", "label": "类型", "validator": ["required"],
+                    "options":{
+                        "Dictionary":"1",
+                        "HintSearch":"2"
+                    }},
+                {"type": "service", "name": "dataSourceName", "label": "数据源", "validator": ["required"],
+                    "service":"http://localhost:9000/service/dataSourceService/getAllDataSource",
+                    "optionLabel":"name","optionValue":"name"},
+
+                {"type": "textarea", "name": "sql", "label": "查询语句", "validator": ["required"]},
+
+                {"type": "textfield", "name": "realColumn", "label": "值列", "validator": ["required"],"hideFunc":"hideDictionary"},
+                {"type": "textfield", "name": "displayColumn", "label": "显示列", "validator": ["required"],"hideFunc":"hideDictionary"},
+                {"type": "textfield", "name": "limitCount", "label": "联想长度", "validator": ["required"],"hideFunc":"hideHintSearch"}
+            ],
+            "formButtons":[
+                // {
+                //     "callback": "save",
+                //     "label": "保存",
+                //     "class": "btn btn-sm btn-primary",
+                //     "icon": "glyphicon glyphicon-ok"
+                // },
+                // {
+                //     "callback": "cancel",
+                //     "label": "取消",
+                //     "class": "btn btn-sm btn-grey",
+                //     "icon": "glyphicon glyphicon-remove"
+                // }
+            ]
+        });
+        $templateCache.put("meta/data-source-detail.json",{
+            "name": "dataSourceForm",
+            "title": "数据源信息",
+            "fields": [
+                {"type": "textfield", "name": "name", "label": "Name", "validator": ["required"]},
+                {"type": "dropdown", "name": "driverType", "label": "driverType",
+                    "options":{
+                        "MySQL":"MySQL",
+                        "Oracle":"Oracle",
+                        "SqlServer":"SqlServer",
+                        "Sybase":"Sybase",
+                        "DB2":"DB2",
+                        "PostgreSql":"PostgreSql"
+                    },
+                    "validator": ["required"]},
+                {"type": "textfield", "name": "driverClass", "label": "driverClass", "validator": ["required"]},
+                {"type": "textfield", "name": "host", "label": "host", "validator": ["required"]},
+                {"type": "textfield", "name": "port", "label": "port", "validator": ["required"]},
+                {"type": "textfield", "name": "schema", "label": "schema", "validator": ["required"]},
+                {"type": "textfield", "name": "jdbcUrl", "label": "jdbcUrl", "validator": ["required"]},
+                {"type": "textfield", "name": "user", "label": "username", "validator": ["required"]},
+                {"type": "textfield", "name": "password", "label": "password", "validator": ["required"]}
+            ],
+            "formButtons":[
+                {
+                    "callback": "testConnection",
+                    "params": {"docName":"dict"},
+                    "label": "测试链接",
+                    "class": "btn btn-sm btn-primary",
+                    "icon": "glyphicon glyphicon-ok"
+                },
+                // {
+                //     "callback": "save",
+                //     "params": {"docName":"dict"},
+                //     "label": "保存",
+                //     "class": "btn btn-sm btn-primary",
+                //     "icon": "glyphicon glyphicon-ok"
+                // },
+                // {
+                //     "callback": "cancel",
+                //     "params": {"docName":"dict"},
+                //     "label": "取消",
+                //     "class": "btn btn-sm btn-grey",
+                //     "icon": "glyphicon glyphicon-remove"
+                // }
             ]
         });
     }]);

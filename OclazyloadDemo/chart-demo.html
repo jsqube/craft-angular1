@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart demo</title>
+</head>
+<body ng-app="chartDemo">
+
+<div ng-controller="LineChartCtrl">
+    <canvas id="chart" class="chart-base" chart-data="store.data" chart-type="store.type"
+            chart-labels="store.labels" chart-legend="true" chart-series="store.series"
+            chart-click="store.onClick" >
+    </canvas>
+
+</div>
+
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../bower_components/chart.js/dist/Chart.js"></script>
+<script src="../bower_components/angular-chart.js/dist/angular-chart.js"></script>
+<script>
+    angular.module('chartDemo', ['chart.js']);
+    angular.module('chartDemo').controller('LineChartCtrl',['$scope',function ($scope) {
+        $scope.store=angular.extend({});
+        $scope.store.labels = ["January", "February", "March", "April", "May", "June", "July"];
+        $scope.store.series = ["Series A", "Series B"];
+        $scope.store.data = [
+            [65, 59, 80, 81, 56, 55, 40],
+            [28, 48, 40, 19, 86, 27, 90]
+        ];
+        $scope.store.type = "line";
+        $scope.store.onClick= function () {
+
+        };
+    }])
+</script>
+
+
+</body>
+</html>

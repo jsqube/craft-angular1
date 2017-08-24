@@ -56,46 +56,47 @@ gulp.task('templates', function () {
 
 //combine craft javascript files into separate files
 gulp.task('combineJs', ['templates'], function () {
-    gulp.src(["src/scripts/widgets/**/*.js"])
-        .pipe(concat("craft-widgets.js"))
-        .pipe(gulp.dest("dist/craft/exp"))
-        .pipe(uglify())
-        .pipe(rename('craft-widgets.min.js'))
-        .pipe(gulp.dest('dist/craft/min'));
-    gulp.src("src/scripts/craft-cap-api.js")
-        .pipe(concat("craft-cap-api.js"))
-        .pipe(gulp.dest("dist/craft/exp"))
-        .pipe(uglify())
-        .pipe(rename('craft-cap-api.min.js'))
-        .pipe(gulp.dest('dist/craft/min'));
-    gulp.src("src/scripts/craft-filter.js")
-        .pipe(concat("craft-filter.js"))
-        .pipe(gulp.dest("dist/craft/exp"))
-        .pipe(uglify())
-        .pipe(rename('craft-filter.min.js'))
-        .pipe(gulp.dest('dist/craft/min'));
-    // gulp.src(["src/scripts/core/**/*.js",
-    //     'bower_components/angular-sanitize/angular-sanitize.js',
-    //     'bower_components/angular-animate/angular-animate.js'
-    // ])
     gulp.src(["src/scripts/core/**/*.js"])
         .pipe(concat("craft-core.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
         .pipe(rename('craft-core.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
-    gulp.src("src/scripts/components/**/*.js")
-        .pipe(concat("craft-components.js"))
+
+    gulp.src(["src/scripts/widgets/**/*.js"])
+        .pipe(concat("craft-widgets.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
-        .pipe(rename('craft-components.min.js'))
+        .pipe(rename('craft-widgets.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
-    gulp.src("src/scripts/validator/**/*.js")
-        .pipe(concat("craft-validator.js"))
+    gulp.src(["src/scripts/api/common/**/*.js","src/scripts/api/rest-api/**/*.js"])
+        .pipe(concat("craft-rest-api.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
-        .pipe(rename('craft-validator.min.js'))
+        .pipe(rename('craft-rest-api.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
+
+    gulp.src(["src/scripts/api/common/**/*.js","src/scripts/api/cap-api/**/*.js"])
+        .pipe(concat("craft-cap-api.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-cap-api.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
+
+    gulp.src("src/scripts/filter/craft-filter.js")
+        .pipe(concat("craft-filter.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-filter.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
+
+
+    gulp.src("src/scripts/validation/**/*.js")
+        .pipe(concat("craft-validation.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-validation.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
     gulp.src("src/scripts/**/*.js")

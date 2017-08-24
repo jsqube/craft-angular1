@@ -52,6 +52,44 @@
       }
     ]
   },
+
+  {"title": "图表展示",
+    "icon": "fa fa-area-chart",
+    "submenu":[
+      {
+        "title": "Line",
+        "state": "home.chart",
+        "params": {"docName": "Line"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "Bar",
+        "state": "home.chart",
+        "params": {"docName": "Bar"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "Doughnut",
+        "state": "home.chart",
+        "params": {"docName": "Doughnut"},
+        "icon": "icon-double-angle-right"
+      },
+      {
+        "title": "Radar",
+        "state": "home.chart",
+        "params": {"docName": "Radar"},
+        "icon": "icon-double-angle-right"
+      },{
+        "title": "Pie",
+        "state": "home.chart",
+        "params": {"docName": "Pie"}
+      },{
+        "title": "Polar",
+        "state": "home.chart",
+        "params": {"docName": "Polar"}
+      }
+    ]
+  },
   {
     "title": "开发工具",
     "icon": "fa fa-list-alt",

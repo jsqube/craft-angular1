@@ -1,5 +1,5 @@
 (function () {
-    angular.module('demo', ['ngSanitize','craft.core','oc.lazyLoad','ui.bootstrap','ui.router','craft.api','craft.auth','metadata','craft.widgets']);
+    angular.module('demo', ['craft.core','craft.api','craft.auth','metadata','craft.widgets','chart.js']);
 
     angular.module('demo').config(['$ocLazyLoadProvider',function ($ocLazyLoadProvider) {
         $ocLazyLoadProvider.config({
@@ -78,7 +78,7 @@
             .state('home.edit', {
                 url: "/form/{docName}/{action}/{id}",
                 templateProvider: ['$stateParams','$templateCache','$http',function ($stateParams,$templateCache,$http) {
-                    var appConfig= $templateCache.get('meta/app-config.json');
+                    var appConfig= $templateCache.get('meta/app-module-config.json');
                     console.log(appConfig);
                     var config=appConfig[$stateParams.docName + '-' + $stateParams.action];
                     console.log("template file=",config.tpl);
@@ -124,6 +124,38 @@
                         else
                             return false;
                     }
+                }
+            })
+
+
+            .state("home.chart", {
+                url: "/{docName}",
+                templateProvider: ['$stateParams','$templateCache','$http',function ($stateParams,$templateCache,$http) {
+                    var appConfig= $templateCache.get('meta/app-module-config.json');
+                    console.log(appConfig);
+                    var config=appConfig[$stateParams.docName + '-chart'];
+                    console.log("template file=",config.tpl);
+                    return $http.get(config.tpl).then(function (tpl) {
+                        return tpl.data;
+                    })
+                }],
+
+                controllerProvider: ['$stateParams','$templateCache', function ($stateParams, $templateCache) {
+                    var appConfig= $templateCache.get('meta/app-module-config.json');
+                    var config=appConfig[$stateParams.docName + '-chart'];
+                    console.log("route is: /form/{}/{}", $stateParams.docName,$stateParams.action);
+                    console.log("route config controller: {1}", config);
+                    return config.ctrl;
+                }],
+                resolve: {
+                    chartComponents: ['$ocLazyLoad','$templateCache', '$stateParams',function ($ocLazyLoad,$templateCache, $stateParams) {
+                        var appConfig= $templateCache.get('meta/app-module-config.json');
+                        console.log(appConfig);
+                        var config=appConfig[$stateParams.docName + '-chart'];
+                        console.log("template modules=",config.modules);
+                        return $ocLazyLoad.load(config.modules);
+                    }]
+
                 }
             })
 
@@ -293,7 +325,7 @@
         };
         BaseHandler.new = function (obj) {
             console.log("new", obj,BaseHandler.getDocName());
-            $state.go("home.edit", {"docName":BaseHandler.getDocName(),"action":"detail"}, {location: true, reload: true});
+            $state.go("home.edit", {"docName":BaseHandler.getDocName(),"action":"detail","id":null}, {location: true, reload: true});
         };
         BaseHandler.edit = function (item) {
             $state.go("home.edit", {"docName": BaseHandler.getDocName(),"action":"detail", "id": item.id}, {location: true, reload: false});

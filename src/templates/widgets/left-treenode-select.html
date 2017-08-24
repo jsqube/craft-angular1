@@ -1,0 +1,15 @@
+<div class="tree-item" ng-class="{true:'tree-selected',false:''} [selectItems.indexOf(item)>=0]"
+     ng-if="item.children==undefined">
+    <div class="tree-item-name"><a ng-click="select(item)">
+        <i ng-class="{true:'fa fa-check-square-o',false:'fa fa-square-o'}[selectItems.indexOf(item)>=0]"></i>
+        {{item.name}}</a></div>
+</div>
+<div class="tree-folder" ng-if="item.children.length>=0">
+    <div class="tree-folder-header dropdown-toggle collapsed" data-toggle="collapse" data-target="#lefttree{{item.id}}">
+        <i class="fa my-tree-icon"></i>
+        <div class="tree-folder-name">{{item.name}}</div>
+    </div>
+    <div class="tree-folder-content collapse" ng-if="item.children.length>0" id="lefttree{{item.id}}">
+        <div ng-repeat="item in item.children" ng-include="'templates/component/left-treenode-select.html'"></div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="row treeselect">
+    <div class="col-xs-5">
+        <select name="from" id="undo_redo" class="form-control" size="13" multiple="multiple" ng-model="toBeSelected">
+            <option ng-repeat="item in leftoptions track by $index" value="{{item.value}}">{{item.name}}</option>
+        </select>
+    </div>
+    <div class="col-xs-2 selectbutton">
+        <button type="button" id="undo_redo_rightAll" class="btn btn-primary btn-block" ng-click="selectAll()">
+            <i class="glyphicon glyphicon-forward"></i></button>
+        <button type="button" id="undo_redo_rightSelected" class="btn btn-warning btn-block" ng-click="select()">
+            <i class="glyphicon glyphicon-chevron-right"></i></button>
+        <button type="button" id="undo_redo_leftSelected" class="btn btn-warning btn-block" ng-click="remove()">
+            <i class="glyphicon glyphicon-chevron-left"></i></button>
+        <button type="button" id="undo_redo_leftAll" class="btn btn-primary btn-block" ng-click="removeAll()">
+            <i class="glyphicon glyphicon-backward"></i></button>
+    </div>
+    <div class="col-xs-5">
+        <select name="to" id="undo_redo_to" class="form-control" size="13" multiple="multiple" ng-model="toBeRemoved">
+            <option ng-repeat="item in rightoptions track by $index" value="{{item.value}}">{{item.name}}
+            </option>
+        </select>
+    </div>
+</div>

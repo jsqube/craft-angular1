@@ -1,0 +1,26 @@
+<div class="row lefttree">
+    <div class="col-xs-5">
+        <div  class="tree tree-selectable" id="tree-select-left-div">
+            <div  ng-repeat="item in lefttree" ng-include="'templates/widgets/left-treenode-select.html'"></div>
+        </div>
+    </div>
+    <div class="col-xs-2">
+        <button type="button" id="undo_redo_rightAll" class="btn btn-primary btn-block" ng-click="rightAll()">
+            <i class="glyphicon glyphicon-forward"></i>
+        </button>
+        <button type="button"   id="undo_redo_rightSelected" class="btn btn-warning btn-block" ng-click="rightSelect()">
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </button>
+        <button type="button"  id="undo_redo_leftSelected" class="btn btn-warning btn-block" ng-click="leftSelect()">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+        </button>
+        <button type="button" id="undo_redo_leftAll" class="btn btn-primary btn-block" ng-click="leftAll()">
+            <i class="glyphicon glyphicon-backward"></i>
+        </button>
+    </div>
+    <div class="col-xs-5">
+        <div  class="tree tree-selectable" id="tree-select-right-div">
+            <div  ng-repeat="item in righttree" ng-include="'templates/widgets/right-treenode-select.html'"></div>
+        </div>
+    </div>
+</div>

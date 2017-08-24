@@ -2,7 +2,7 @@
  * Created by Ming on 2017/4/12.
  */
 (function () {
-    angular.module("FormDesignerCtrl",[]).controller("FormDesignerCtrl",function ($scope,$resolve,$state,BaseHandler) {
+    angular.module("FormDesignerCtrl",[]).controller("FormDesignerCtrl",function ($scope,$state,BaseHandler) {
         $scope.handlers = angular.extend(BaseHandler);
         $scope.handlers.getDocName=function () {
             // console.log("this is getting called");
