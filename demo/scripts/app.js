@@ -1,5 +1,5 @@
 (function () {
-    angular.module('demo', ['craft.core','craft.api','craft.auth','metadata','craft.widgets','chart.js']);
+    angular.module('demo', ['craft.core','craft.api.rest','craft.auth.jwt','metadata','craft.widgets']);
 
     angular.module('demo').config(['$ocLazyLoadProvider',function ($ocLazyLoadProvider) {
         $ocLazyLoadProvider.config({

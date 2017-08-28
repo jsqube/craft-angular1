@@ -1,8 +1,8 @@
 (function () {
     'use strict';
-    angular.module('craft.auth',['craft.auth.JwtAuthService','craft.auth.JwtTokenInterceptor','craft.auth.token']);
+    angular.module('craft.auth.jwt',['craft.auth.JwtAuthService','craft.auth.JwtTokenInterceptor','craft.auth.token']);
 
-    angular.module('craft.auth').run(['$rootScope','JwtAuthService','$state',function ($rootScope,JwtAuthService,$state) {
+    angular.module('craft.auth.jwt').run(['$rootScope','JwtAuthService','$state',function ($rootScope,JwtAuthService,$state) {
         //viewContentLoading is used in angular/views/index.html to show/hide content and progress bar (spinner icon) when loading new pages
         // $rootScope.viewContentLoading = false;
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {

@@ -57,7 +57,8 @@ angular.module("demo", ["ui.router", "oc.lazyLoad"])
                         return $ocLazyLoad.load(
                             {
                                 name: "chart",
-                                files: ["../bower_components/chart.js/dist/Chart.js","chart/chart.js"]
+                                // files: ["../bower_components/chart.js/dist/Chart.js","chart/chart.js"]
+                                files: ["chart/chart.js"]
                             }
                         )
                     }]
@@ -75,3 +76,10 @@ angular.module("demo", ["ui.router", "oc.lazyLoad"])
             $state.go("chart")
         }
     });
+
+angular.module('demo').config(['$ocLazyLoadProvider',function ($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        debug: true,
+        events: true
+    });
+}]);

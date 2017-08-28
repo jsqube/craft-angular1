@@ -161,7 +161,7 @@
         $templateCache.put("meta/report-list.json",{
             "repo":"report",
             "columns": [
-                {"type":"checkbox","name": "id","model":"selectedIds"},
+                // {"type":"checkbox","name": "id","model":"selectedIds"},
                 {"name": "id", "label": "ID", "sort": "id"},
                 {"name": "reportName", "label": "报表名称", "sort": "reportName"}
             ],

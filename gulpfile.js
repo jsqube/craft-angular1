@@ -91,6 +91,19 @@ gulp.task('combineJs', ['templates'], function () {
         .pipe(rename('craft-filter.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
+    gulp.src("src/scripts/chart/**/*.js")
+        .pipe(concat("craft-chart.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-chart.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
+
+    gulp.src("src/scripts/lodash/**/*.js")
+        .pipe(concat("craft-lodash.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-lodash.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
 
     gulp.src("src/scripts/validation/**/*.js")
         .pipe(concat("craft-validation.js"))
@@ -108,7 +121,12 @@ gulp.task('combineJs', ['templates'], function () {
 });
 
 gulp.task('combineCss', function () {
-    gulp.src(["src/assets/css/ace.css", "src/assets/css/ace-skins.css"])
+    gulp.src(["src/assets/css/bootstrap.css",
+        "src/assets/css/font-awesome.css",
+        "src/assets/css/ace.css",
+        "src/assets/css/ace-skins.css",
+        "src/assets/css/ngToast.css",
+        "src/assets/css/ngToast-animations.css"])
         .pipe(concat("craft.css"))
         .pipe(gulp.dest("dist/craft/css"))
         .pipe(cssmin())
