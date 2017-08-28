@@ -71,17 +71,17 @@ gulp.task('combineJs', ['templates'], function () {
         .pipe(gulp.dest('dist/craft/min'));
 
     gulp.src(["src/scripts/api/common/**/*.js","src/scripts/api/rest-api/**/*.js"])
-        .pipe(concat("craft-rest-api.js"))
+        .pipe(concat("craft-api-rest.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
-        .pipe(rename('craft-rest-api.min.js'))
+        .pipe(rename('craft-api-rest.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
     gulp.src(["src/scripts/api/common/**/*.js","src/scripts/api/cap-api/**/*.js"])
-        .pipe(concat("craft-cap-api.js"))
+        .pipe(concat("craft-api-cap.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
-        .pipe(rename('craft-cap-api.min.js'))
+        .pipe(rename('craft-api-cap.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
     gulp.src("src/scripts/filter/craft-filter.js")
@@ -91,7 +91,7 @@ gulp.task('combineJs', ['templates'], function () {
         .pipe(rename('craft-filter.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
-    gulp.src("src/scripts/chart/**/*.js")
+    gulp.src(["src/scripts/chart/Chart.js","src/scripts/chart/angular-chart.js","src/scripts/chart/craft-chart.js"])
         .pipe(concat("craft-chart.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())

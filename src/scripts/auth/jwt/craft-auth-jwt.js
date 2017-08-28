@@ -28,7 +28,7 @@
         // });
     }]);
 
-    angular.module('craft.auth').controller('UserProfileCtrl',function ($scope,HttpService,ConfigService, TokenService,$state) {
+    angular.module('craft.auth.jwt').controller('UserProfileCtrl',function ($scope,HttpService,ConfigService, TokenService,$state) {
         $scope.login=function () {
             console.log("login",$scope.user);
             HttpService.post(ConfigService.getAppConfig().RootPath+'/auth',$scope.user).then(function (data) {

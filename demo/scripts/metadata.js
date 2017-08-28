@@ -81,15 +81,14 @@
                 "ctrl": "LineChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ["../bower_components/chart.js/dist/Chart.js",
-                        'scripts/controllers/line-chart-controller.js']
+                    files: ['scripts/controllers/line-chart-controller.js']
                 }]
             },
             "Bar-chart":{
                 "ctrl": "BarChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ["../bower_components/chart.js/dist/Chart.js",'scripts/controllers/bar-chart-controller.js']
+                    files: ['scripts/controllers/bar-chart-controller.js']
                 }]
             },
             "Pie-chart":{

@@ -1,10 +1,8 @@
 (function () {
     angular.module('BarChartCtrl', [{
-        name: "chart.js",
-        files: ["../bower_components/angular-chart.js/dist/angular-chart.js"]
-    }])
-
-        .controller('BarChartCtrl', ['$scope', function ($scope) {
+        name: "craft.chart",
+        files: ["../dist/craft/exp/craft-chart.js"]
+    }]).controller('BarChartCtrl', ['$scope', function ($scope) {
             $scope.store = angular.extend({});
 
             $scope.store.labels = ["2006", "2007", "2008", "2009", "2010", "2011", "2012"];
