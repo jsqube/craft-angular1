@@ -81,43 +81,121 @@
                 "ctrl": "LineChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ['scripts/controllers/line-chart-controller.js']
+                    files: ['scripts/controllers/chart/line-chart-controller.js']
                 }]
             },
             "Bar-chart":{
                 "ctrl": "BarChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ['scripts/controllers/bar-chart-controller.js']
+                    files: ['scripts/controllers/chart/bar-chart-controller.js']
                 }]
             },
             "Pie-chart":{
                 "ctrl": "PieChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ['scripts/controllers/pie-chart-controller.js']
+                    files: ['scripts/controllers/chart/pie-chart-controller.js']
                 }]
             },
             "Radar-chart":{
                 "ctrl": "RadarChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ['scripts/controllers/radar-chart-controller.js']
+                    files: ['scripts/controllers/chart/radar-chart-controller.js']
                 }]
             },
             "Polar-chart":{
                 "ctrl": "PolarChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ['scripts/controllers/polar-chart-controller.js']
+                    files: ['scripts/controllers/chart/polar-chart-controller.js']
                 }]
             },
             "Doughnut-chart":{
                 "ctrl": "DoughnutChartCtrl",
                 "tpl": "views/charts-template.html",
                 "modules": [{
-                    files: ['scripts/controllers/doughnut-chart-controller.js']
+                    files: ['scripts/controllers/chart/doughnut-chart-controller.js']
                 }]
+            },
+            "uib-modules": {
+                "wizard": {
+                    files: ['scripts/controllers/uib/wizard-controller.js', '../bower_components/angular-wizard/dist/angular-wizard.js']
+                },
+                "accordion": {
+                    files: ['scripts/controllers/uib/AccordionDemoCtrl.js']
+                },
+                "alert": {
+                    files: ['scripts/controllers/uib/AlertDemoCtrl.js']
+                },
+                "buttons": {
+                    files: ['scripts/controllers/uib/ButtonsDemoCtrl.js']
+                },
+                "carousel": {
+                    files: ['scripts/controllers/uib/CarouselDemoCtrl.js']
+                },
+                "collapse": {
+                    files: ['scripts/controllers/uib/CollapseDemoCtrl.js']
+                },
+                "DateParser": {
+                    files: ['scripts/controllers/uib/DateParserDemoCtrl.js']
+                },
+                "Datepicker": {
+                    files: ['scripts/controllers/uib/DatepickerDemoCtrl.js']
+                },
+                "DatepickerPopup": {
+                    files: ['scripts/controllers/uib/DatepickerPopupDemoCtrl.js']
+                },
+                "Dropdown": {
+                    files: ['scripts/controllers/uib/DropdownCtrl.js']
+                },
+                "modal": {
+                    files: ['scripts/controllers/uib/ModalDemoCtrl.js']
+                },
+                "pager": {
+                    files: ['scripts/controllers/uib/PagerDemoCtrl.js']
+                },
+                "pagination": {
+                    files: ['scripts/controllers/uib/PaginationDemoCtrl.js']
+                },
+                "popover": {
+                    files: ['scripts/controllers/uib/PopoverDemoCtrl.js']
+                },
+                "position": {
+                    files: ['scripts/controllers/uib/PositionDemoCtrl.js']
+                },
+                "Progress": {
+                    files: ['scripts/controllers/uib/ProgressDemoCtrl.js']
+                },
+                "rating": {
+                    files: ['scripts/controllers/uib/RatingDemoCtrl.js']
+                },
+                "rating": {
+                    files: ['scripts/controllers/uib/RatingDemoCtrl.js']
+                },
+                "tabs": {
+                    files: ['scripts/controllers/uib/TabsDemoCtrl.js']
+                },
+                "timepicker": {
+                    files: ['scripts/controllers/uib/TimepickerDemoCtrl.js']
+                },
+                "tooltip": {
+                    files: ['scripts/controllers/uib/TooltipDemoCtrl.js']
+                },
+                "typeahead": {
+                    files: ['scripts/controllers/uib/TypeaheadCtrl.js']
+                },
+                "tables": {
+                    files: [
+                        '../bower_components/jquery/dist/jquery.js',
+                        '../bower_components/datatables/media/js/jquery.dataTables.js',
+                        '../bower_components/datatables/media/js/dataTables.bootstrap.js',
+                        '../bower_components/angular-datatables/dist/angular-datatables.js',
+                        'scripts/controllers/uib/table-controller.js',
+                    ]
+                }
+
             }
         });
 

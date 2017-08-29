@@ -1,13 +1,13 @@
 (function(angular, window){
     'use strict';
-    angular.module('craft.api.crud', []);
+    angular.module('craft.api.crud.rest', ['craft.api.config']);
 
     /**
      * ========================================================================
      * CrudService
      * ========================================================================
      */
-    angular.module('craft.api.crud').factory('CrudService', CrudServiceFun);
+    angular.module('craft.api.crud.rest').factory('CrudService', CrudServiceFun);
     CrudServiceFun.$inject = ['HttpService', 'ConfigService', '$q'];
     function CrudServiceFun(HttpService, ConfigService, $q) {
         var CrudService = angular.extend({});

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
-    angular.module('craft.api.crud', []);
-    angular.module('craft.api.crud').factory('CrudService', CrudServiceFun);
+    angular.module('craft.api.crud.cap', []);
+    angular.module('craft.api.crud.cap').factory('CrudService', CrudServiceFun);
     CrudServiceFun.$inject = [ 'HttpService', 'ConfigService' ];
     function CrudServiceFun(HttpService, ConfigService) {
         var CrudService = angular.extend({});

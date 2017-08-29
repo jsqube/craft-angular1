@@ -5,7 +5,7 @@ describe('http-service', function () {
 
     var httpService, $httpBackend;
 
-    beforeEach(module('craft.api'));
+    beforeEach(module('craft.api.http.rest'));
 
     beforeEach(inject(function ($injector) {
         // Set up the mock http service responses
@@ -58,8 +58,8 @@ describe('http-service', function () {
         ];
         result.then(function (data) {
             console.log("============")
-            expect(data).toEqual(resultData);
-            expect(data.length).toEqual(3);
+            expect(data.data).toEqual(resultData);
+            expect(data.data.length).toEqual(3);
         },function (reason) {
         },function (reason) {
         });
@@ -70,7 +70,7 @@ describe('http-service', function () {
         var result=httpService.put('/repository/role',{"roleName":"test","desc":"test"});
         $httpBackend.flush();
         result.then(function (data) {
-            expect(data).toEqual("success");
+            expect(data.data).toEqual("success");
         }, function (reason) {
         });
     });
@@ -79,7 +79,7 @@ describe('http-service', function () {
         var result=httpService.post('/repository/role/1',{"roleName":"test1","desc":"test1"});
         $httpBackend.flush();
         result.then(function (data) {
-            expect(data).toEqual("success");
+            expect(data).toEqual({ version: '1.0', errorCode: 0, errorMsg: null, data: 'success' });
         }, function (reason) {
         });
     });
@@ -89,7 +89,7 @@ describe('http-service', function () {
         var result=httpService.delete('/repository/role/1',{"roleName":"test","desc":"test"});
         $httpBackend.flush();
         result.then(function (data) {
-            expect(data).toEqual("success");
+            expect(data.data).toEqual("success");
         }, function (reason) {
         });
     });
@@ -111,7 +111,7 @@ describe('http-service', function () {
         var result=httpService.get('/repository/roles/findAll');
         $httpBackend.flush();
         result.then(function (data) {
-            expect(data).toEqual("success");
+            expect(data).toEqual({version: '1.0', errorCode: 1, errorMsg: 'service not found', data: null});
         }).catch(function (reason) {
             console.log(reason);
             expect(reason).toEqual('service not found');

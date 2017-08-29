@@ -159,6 +159,28 @@
                 }
             })
 
+            .state('home.uib', {
+                url: "/component/uib/{docName}",
+                templateUrl: function ($stateParams) {
+                    return "views/uib/" + $stateParams.docName + "Demo.html"
+                },
+                controllerProvider: ['$stateParams', function ($stateParams) {
+                    console.log($stateParams.docName);
+                    var upperFist = function (name) {
+                        return name.charAt(0).toUpperCase() + name.substring(1);
+                    };
+                    return upperFist($stateParams.docName) + "DemoCtrl";
+                }],
+                resolve: {
+                    formComponents: function ($ocLazyLoad, $stateParams,$templateCache) {
+                        var appConfig= $templateCache.get('meta/app-module-config.json');
+                        return $ocLazyLoad.load([{
+                            name: "ui.bootstrap.demo",
+                            files: appConfig['uib-modules'][$stateParams.docName].files
+                        }]);
+                    }
+                }
+            })
             .state("auth", {
                 url: "/auth",
                 templateUrl: "views/auth/auth.html",

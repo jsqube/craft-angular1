@@ -5,7 +5,7 @@
      * HttpService
      * ========================================================================
      */
-    angular.module('craft.api.http',[]).factory('HttpService', HttpServiceFunc);
+    angular.module('craft.api.http.rest',[]).factory('HttpService', HttpServiceFunc);
     HttpServiceFunc.$inject = ['$q', '$http' ];
     function HttpServiceFunc($q, $http) {
         var HttpService = angular.extend({});

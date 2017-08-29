@@ -134,6 +134,12 @@ gulp.task('combineCss', function () {
         .pipe(gulp.dest('dist/craft/css'));
 });
 
+gulp.task('combineTest', function () {
+    gulp.src(["test/craft-filter/**/*.js"])
+        .pipe(concat("craft-filter-test.js"))
+        .pipe(gulp.dest("dist/craft/"));
+});
+
 //gulp.task('minifyJs', ['combineJs', 'templates'], function () {
 //    gulp.src('dist/craft/readable/*.js')
 //        .pipe(rename({

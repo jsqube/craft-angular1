@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    angular.module('craft.api.http', []).factory('HttpService', HttpServiceFunc);
+    angular.module('craft.api.http.cap', []).factory('HttpService', HttpServiceFunc);
     HttpServiceFunc.$inject = ['$q', '$http' ];
     function HttpServiceFunc($q, $http) {
         var HttpService = angular.extend({});

@@ -24,7 +24,7 @@ describe('crud-service', function () {
         return index;
     };
 
-    beforeEach(module('craft.api'));
+    beforeEach(module('craft.api.rest'));
 
     beforeEach(inject(function ($injector,$window) {
         // Set up the mock http service responses
