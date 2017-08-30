@@ -33,7 +33,7 @@
             console.log("login",$scope.user);
             HttpService.post(ConfigService.getAppConfig().RootPath+'/auth',$scope.user).then(function (data) {
                 console.log(data);
-                TokenService.saveToken(Constants.authTokenName,data.token);
+                TokenService.saveToken(ConfigService.getAppConfig().authTokenName,data.token);
                 $state.go('home.default');
             },function (error) {
                 console.log(error)

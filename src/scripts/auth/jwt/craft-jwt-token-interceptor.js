@@ -5,7 +5,7 @@
      * JwtTokenInterceptor
      * ========================================================================
      */
-    angular.module('craft.auth.JwtTokenInterceptor',['craft.api.config','craft.auth.token']).factory('JwtTokenInterceptor', JwtTokenInterceptor);
+    angular.module('craft.auth.JwtTokenInterceptor',['craft.auth.token']).factory('JwtTokenInterceptor', JwtTokenInterceptor);
     JwtTokenInterceptor.$inject = [ 'TokenService', 'ConfigService'];
     function JwtTokenInterceptor(TokenService, ConfigService) {
         return {

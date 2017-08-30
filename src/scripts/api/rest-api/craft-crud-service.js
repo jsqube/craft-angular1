@@ -1,6 +1,6 @@
-(function(angular, window){
+(function(){
     'use strict';
-    angular.module('craft.api.crud.rest', ['craft.api.config']);
+    angular.module('craft.api.crud.rest', []);
 
     /**
      * ========================================================================
@@ -112,4 +112,4 @@
         };
         return CrudService;
     }
-})(angular, window);
+}).call(this);

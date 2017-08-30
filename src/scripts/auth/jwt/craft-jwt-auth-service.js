@@ -5,7 +5,7 @@
      * JwtAuthService
      * ========================================================================
      */
-    angular.module('craft.auth.JwtAuthService',['craft.api.config','craft.auth.token']).factory('JwtAuthService', JwtAuthServiceFun);
+    angular.module('craft.auth.JwtAuthService',['craft.auth.token']).factory('JwtAuthService', JwtAuthServiceFun);
     JwtAuthServiceFun.$inject=['TokenService', 'ConfigService', '$q', '$http'];
     function JwtAuthServiceFun(TokenService, ConfigService, $q, $http) {
         var authService = angular.extend({});

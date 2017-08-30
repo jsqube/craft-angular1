@@ -1,7 +1,7 @@
 /**
  * Created by Ming on 2016/5/21.
  */
-describe('crud-service', function () {
+describe('crud-service-cap', function () {
 
     var crudService, $templateCache, $httpBackend,_;
     var mockRoleData = [
@@ -24,7 +24,7 @@ describe('crud-service', function () {
         return index;
     };
 
-    beforeEach(module('craft.api.rest'));
+    beforeEach(module('craft.api.cap'));
 
     beforeEach(inject(function ($injector,$window) {
         // Set up the mock http service responses
@@ -34,7 +34,7 @@ describe('crud-service', function () {
         _ = $window._;
 
         //prepare configurations
-        $templateCache.put('meta/config/app-config.json', {
+        $templateCache.put('meta/app-config.json', {
             "RootPath": "http://localhost:9876/craft",//http://117.185.125.15:8081//8083,//localhost:9000
             "timeout": 15000
         });
@@ -75,8 +75,6 @@ describe('crud-service', function () {
                     return [200, responseBody];
                 }
             });
-
-
         $httpBackend.whenRoute('PUT', 'http://localhost:9876/craft/repository/:repoName')
             .respond(function (method, url, data, headers, params) {
                 //console.log(params.repoName);

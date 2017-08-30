@@ -56,7 +56,7 @@ gulp.task('templates', function () {
 
 //combine craft javascript files into separate files
 gulp.task('combineJs', ['templates'], function () {
-    gulp.src(["src/scripts/core/**/*.js"])
+    gulp.src(["bower_components/angular/angular.js","bower_components/angular-animate/angular-animate.js","src/scripts/core/**/*.js"])
         .pipe(concat("craft-core.js"))
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
@@ -82,6 +82,14 @@ gulp.task('combineJs', ['templates'], function () {
         .pipe(gulp.dest("dist/craft/exp"))
         .pipe(uglify())
         .pipe(rename('craft-api-cap.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
+
+
+    gulp.src(["src/scripts/auth/jwt/**/*.js"])
+        .pipe(concat("craft-auth-jwt.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-auth-jwt.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
     gulp.src("src/scripts/filter/craft-filter.js")
