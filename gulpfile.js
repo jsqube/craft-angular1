@@ -92,6 +92,13 @@ gulp.task('combineJs', ['templates'], function () {
         .pipe(rename('craft-auth-jwt.min.js'))
         .pipe(gulp.dest('dist/craft/min'));
 
+    gulp.src(["src/scripts/auth/session/**/*.js"])
+        .pipe(concat("craft-auth-session.js"))
+        .pipe(gulp.dest("dist/craft/exp"))
+        .pipe(uglify())
+        .pipe(rename('craft-auth-session.min.js'))
+        .pipe(gulp.dest('dist/craft/min'));
+
     gulp.src("src/scripts/filter/craft-filter.js")
         .pipe(concat("craft-filter.js"))
         .pipe(gulp.dest("dist/craft/exp"))
