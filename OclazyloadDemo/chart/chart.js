@@ -1,19 +1,8 @@
 angular.module('chartDemo', [{
-    name: "chart.js",
-    files: ["../src/scripts/chart/craft-chart.js"]
+    name: "craft.chart",
+    files: ["../dist/craft/min/craft-chart.min.js"]
 }]);
 angular.module('chartDemo')
-    .config(['ChartJsProvider', function (ChartJsProvider) {
-        // Configure all charts
-        ChartJsProvider.setOptions({
-            chartColors: ['#FF5252', '#FF8A80'],
-            responsive: false
-        });
-        // Configure all line charts
-        ChartJsProvider.setOptions('line', {
-            showLines: true
-        });
-    }])
     .controller('LineChartCtrl', ['$scope', function ($scope) {
         $scope.store = angular.extend({});
         $scope.store.labels = ["January", "February", "March", "April", "May", "June", "July"];

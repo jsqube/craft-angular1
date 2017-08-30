@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Craft quick start demo</title>
+    <link rel="stylesheet" href="../dist/craft/css/craft.css"/>
+</head>
+<body>
+<script src="../dist/craft/min/craft-core.min.js"></script>
+
+    <div ng-controller="DemoCtrl">
+        {{model}}
+    </div>
+<script>
+    angular.module("app",['craft.core']);
+    angular.module("app").controller("DemoCtrl",function ($scope) {
+        $scope.model="Hello Craft!";
+    })
+</script>
+
+</body>
+</html>
